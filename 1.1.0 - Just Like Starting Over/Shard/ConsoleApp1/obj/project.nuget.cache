@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "DUvXKOmJUXaN7BBtzA4Ll1XxILb/wDeC+9f7KcK/4jGuTdW3QKWIfygWXPG4kqOWJimaLdSY2TaCcPaZQnqQbw==",
+  "success": true,
+  "projectFilePath": "D:\\Jobs\\(2019 - xxxx) Chalmers University of Technology\\Teaching\\Game Engine Architecture\\Code Releases\\1.1.0 - Just Like Starting Over\\Shard\\ConsoleApp1\\Shard.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Michael\\.nuget\\packages\\sdl2-cs\\2.0.0\\sdl2-cs.2.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
