@@ -31,13 +31,7 @@ mono_crash.*
 *[Ll]og/
 *[Ll]ogs/
 
-1.1.0 - Just Like Starting Over/Shard/ConsoleApp1/bin/
-1.1.0 - Just Like Starting Over/Shard/ConsoleApp1/obj/
-/*/*bin/
-/*/*obj/
-
-*bin/
-*obj/
+[1.1.0 - Just Like Starting Over/Shard/ConsoleApp1/bin]
 
 # Visual Studio 2015/2017 cache/options directory
 **.vs/
