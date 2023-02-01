@@ -24,7 +24,7 @@ namespace Shard
         }
 
         public string getName (string path) {
-            string[] bits = path.Split ("\\");
+            string[] bits = path.Split (Path.DirectorySeparatorChar);
             
             return bits[bits.Length - 1];
         }
