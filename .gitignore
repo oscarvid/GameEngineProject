@@ -31,8 +31,10 @@ mono_crash.*
 *[Ll]og/
 *[Ll]ogs/
 
-GameEngineProject/1.1.0 - Just Like Starting Over/Shard/ConsoleApp1/bin
-GameEngineProject/1.1.0 - Just Like Starting Over/Shard/ConsoleApp1/obj
+1.1.0 - Just Like Starting Over/Shard/ConsoleApp1/bin
+1.1.0 - Just Like Starting Over/Shard/ConsoleApp1/obj
+/*/*bin/
+/*/*obj/
 
 *bin/
 *obj/
