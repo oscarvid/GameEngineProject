@@ -24,6 +24,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Numerics;
 
 namespace Shard
@@ -119,7 +120,7 @@ namespace Shard
             if (Bootstrap.checkEnvironmentalVariable("gravity_modifier"))
             {
                 gravityModifier = float.Parse
-                    (Bootstrap.getEnvironmentalVariable("gravity_modifier"));
+                    (Bootstrap.getEnvironmentalVariable("gravity_modifier"), CultureInfo.InvariantCulture);
             }
             else
             {
