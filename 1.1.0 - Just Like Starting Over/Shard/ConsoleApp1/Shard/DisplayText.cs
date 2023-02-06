@@ -139,21 +139,25 @@ namespace Shard
                  (uint)SDL.SDL_WindowFlags.SDL_WINDOW_FULLSCREEN_DESKTOP);
         }
 
-        public override void initialize()
+        protected virtual void initializeWindow()
         {
-            fontLibrary = new Dictionary<string, IntPtr>();
-
             setSize(1280, 864);
-
-            SDL.SDL_Init(SDL.SDL_INIT_EVERYTHING);
-            SDL_ttf.TTF_Init();
             _window = SDL.SDL_CreateWindow("Shard Game Engine",
                 SDL.SDL_WINDOWPOS_CENTERED,
                 SDL.SDL_WINDOWPOS_CENTERED,
                 getWidth(),
                 getHeight(),
                 0);
+        }
 
+        public override void initialize()
+        {
+            fontLibrary = new Dictionary<string, IntPtr>();
+
+            SDL.SDL_Init(SDL.SDL_INIT_EVERYTHING);
+            SDL_ttf.TTF_Init();
+            
+            initializeWindow();
 
             _rend = SDL.SDL_CreateRenderer(_window,
                 -1,

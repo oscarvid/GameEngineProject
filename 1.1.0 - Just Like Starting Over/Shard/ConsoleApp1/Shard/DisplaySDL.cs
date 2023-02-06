@@ -56,6 +56,18 @@ namespace Shard
         private List<Line> _linesToDraw;
         private List<Circle> _circlesToDraw;
         private Dictionary<string, IntPtr> spriteBuffer;
+
+        protected override void initializeWindow()
+        {
+            setSize(864, 864);
+            _window = SDL.SDL_CreateWindow("Game Engine",
+                SDL.SDL_WINDOWPOS_CENTERED,
+                SDL.SDL_WINDOWPOS_CENTERED,
+                getWidth(),
+                getHeight(),
+                0);
+        }
+        
         public override void initialize()
         {
             spriteBuffer = new Dictionary<string, IntPtr>();

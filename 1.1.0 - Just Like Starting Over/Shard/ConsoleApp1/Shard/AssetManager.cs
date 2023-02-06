@@ -46,7 +46,7 @@ namespace Shard
             foreach (string d in dirs) {
                 walkDirectory (d);
             }
-
+            
             foreach (string f in files) {
                 string filename_raw = getName(f);
                 string filename = filename_raw;

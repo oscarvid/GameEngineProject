@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MissileCommand;
 
 namespace Shard
 {
@@ -30,15 +31,17 @@ namespace Shard
         {
             GameObject hero = new Hero();
 
-            background = new GameObject();
-            background.Transform.SpritePath = getAssetManager().getAssetPath("background2.jpg");
-            background.Transform.X = 0;
-            background.Transform.Y = 0;
+        }
+
+        public void createbackground()
+        {
+            GameObject bg = new Background();
         }
 
         public override void initialize()
         {
             Bootstrap.getInput().addListener(this);
+            createbackground();
             createHero();
         }
     }
