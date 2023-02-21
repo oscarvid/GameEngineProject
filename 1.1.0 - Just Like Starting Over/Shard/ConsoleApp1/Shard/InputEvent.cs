@@ -9,6 +9,12 @@
 *   
 */
 
+
+/*
+ * Added support for controllers by introducing axis and axisValue.
+ * Oscar Arvidson
+ */
+
 namespace Shard
 {
     class InputEvent

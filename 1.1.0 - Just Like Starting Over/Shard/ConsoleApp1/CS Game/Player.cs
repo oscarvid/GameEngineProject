@@ -9,6 +9,7 @@ namespace GameCS
         //Movement variables
         private bool left, right;
         private double speed = 100, jumpSpeed = 260;
+        private int deadZone = 9000;
 
         //Sprite variables
         private string sprite;
@@ -39,14 +40,14 @@ namespace GameCS
 
                 if (inp.Axis == (int)SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_LEFTX)
                 {
-                    if (inp.AxisValue > 0)
+                    if (inp.AxisValue > deadZone)
                     {
                         right = true;
                         left = false;
                         sprite = "right";
                     }
                     
-                    else if (inp.AxisValue < 0)
+                    else if (inp.AxisValue < -deadZone)
                     {
                         right = false;
                         left = true;

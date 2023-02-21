@@ -8,8 +8,6 @@ namespace Shard
     {
         double tick, timeInterval;
 
-        List<System.IntPtr> controllers = new List<System.IntPtr> { };
-
         public override void initialize()
         {
             tick = 0;
@@ -39,6 +37,7 @@ namespace Shard
             if (SDL.SDL_IsGameController(device) == SDL.SDL_bool.SDL_TRUE)
             {
                 SDL.SDL_GameControllerOpen(device);
+                //ToDo remove debug print
                 System.Console.WriteLine("Controller " + device + " Connected!");
             }
         }
@@ -50,11 +49,13 @@ namespace Shard
             {
                 System.IntPtr controller = SDL.SDL_GameControllerFromInstanceID(device);
                 SDL.SDL_GameControllerClose(controller);
+                //ToDo remove debug print
                 System.Console.WriteLine("Controller Disconnected!");
             }
             
             else
             {
+                //ToDo remove debug print
                 System.Console.WriteLine("Controller not found!!!");
             }
         }
@@ -89,42 +90,42 @@ namespace Shard
                 {
                     //Handle ButtonDown action for a button on a controller.
                     case SDL.SDL_EventType.SDL_CONTROLLERBUTTONDOWN:
-                    {
-                        ie.Button = ev.cbutton.button;
-                        informListeners(ie, "ButtonDown");
-                        break;
-                    }
+                        {
+                            ie.Button = ev.cbutton.button;
+                            informListeners(ie, "ButtonDown");
+                            break;
+                        }
 
                     //Handle ButtonUp action for a button on a controller.
                     case SDL.SDL_EventType.SDL_CONTROLLERBUTTONUP:
-                    {
-                        ie.Button = ev.cbutton.button;
-                        informListeners(ie, "ButtonUp");
-                        break;
-                    }
+                        {
+                            ie.Button = ev.cbutton.button;
+                            informListeners(ie, "ButtonUp");
+                            break;
+                        }
                     
                     //Handle AxisMotion action from joystick.
                     case SDL.SDL_EventType.SDL_CONTROLLERAXISMOTION:
-                    {
-                        ie.Axis = ev.caxis.axis;
-                        ie.AxisValue = ev.caxis.axisValue;
-                        informListeners(ie, "AxisMotion");
-                        break;
-                    }
+                        {
+                            ie.Axis = ev.caxis.axis;
+                            ie.AxisValue = ev.caxis.axisValue;
+                            informListeners(ie, "AxisMotion");
+                            break;
+                        }
 
                     //Handle adding device while running the program.
                     case SDL.SDL_EventType.SDL_CONTROLLERDEVICEADDED:
-                    {
-                        connectController(ev.cdevice.which);
-                        break;
-                    }
+                        {
+                            connectController(ev.cdevice.which);
+                            break;
+                        }
 
                     //Handle removing device while running the program.
                     case SDL.SDL_EventType.SDL_CONTROLLERDEVICEREMOVED:
-                    {
-                        disconnectController(ev.cdevice.which);
-                        break;
-                    }
+                        {
+                            disconnectController(ev.cdevice.which);
+                            break;
+                        }
                 }
             }
         }
