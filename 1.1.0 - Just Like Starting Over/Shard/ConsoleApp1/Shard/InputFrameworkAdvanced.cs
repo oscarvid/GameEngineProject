@@ -1,4 +1,5 @@
 ﻿using SDL2;
+using System.Collections.Generic;
 
 namespace Shard
 {
@@ -6,38 +7,55 @@ namespace Shard
     class InputFrameworkAdvanced : InputSystem
     {
         double tick, timeInterval;
-        System.IntPtr controller = System.IntPtr.Zero;
+
+        List<System.IntPtr> controllers = new List<System.IntPtr> { };
+
         public override void initialize()
         {
             tick = 0;
             timeInterval = 1.0 / 60.0;
             SDL.SDL_Init(SDL.SDL_INIT_GAMECONTROLLER);
-            checkForConnectedControllers();
+            connectControllers();
         }
 
 
-        //Connect avaiable controllers.
-        private void checkForConnectedControllers()
+        //Add intial controllers.
+        private void connectControllers()
         {
             for (int i = 0; i < SDL.SDL_NumJoysticks(); i++)
             {
                 if (SDL.SDL_IsGameController(i) == SDL.SDL_bool.SDL_TRUE)
                 {
-                    controller = SDL.SDL_GameControllerOpen(i);
+                    SDL.SDL_GameControllerOpen(i);
                     System.Console.WriteLine("Controller " + i + " Connected!");
                 }
             }
 
         }
 
-        //Close selected controller.
-        private void closeControllers(System.IntPtr controller)
+        //Connect new controller.
+        private void connectController(int device)
         {
-            if (controller != System.IntPtr.Zero)
+            if (SDL.SDL_IsGameController(device) == SDL.SDL_bool.SDL_TRUE)
             {
+                SDL.SDL_GameControllerOpen(device);
+                System.Console.WriteLine("Controller " + device + " Connected!");
+            }
+        }
+
+        //Remove controller.
+        private void disconnectController(int device)
+        {
+            if(device >= 0)
+            {
+                System.IntPtr controller = SDL.SDL_GameControllerFromInstanceID(device);
                 SDL.SDL_GameControllerClose(controller);
-                controller = System.IntPtr.Zero;
                 System.Console.WriteLine("Controller Disconnected!");
+            }
+            
+            else
+            {
+                System.Console.WriteLine("Controller not found!!!");
             }
         }
 
@@ -67,18 +85,47 @@ namespace Shard
                 ie = new InputEvent();
 
 
-                //Handle ButtonDown action for a button on a controller.
-                if (ev.type == SDL.SDL_EventType.SDL_CONTROLLERBUTTONDOWN)
+                switch (ev.type)
                 {
-                    ie.Button = (int)ev.cbutton.button;
-                    informListeners(ie, "ButtonDown");
-                }
-                else if (ev.type == SDL.SDL_EventType.SDL_CONTROLLERBUTTONUP)
-                {
-                    ie.Button = (int)ev.cbutton.button;
-                    informListeners(ie, "ButtonUp");
-                }
+                    //Handle ButtonDown action for a button on a controller.
+                    case SDL.SDL_EventType.SDL_CONTROLLERBUTTONDOWN:
+                    {
+                        ie.Button = ev.cbutton.button;
+                        informListeners(ie, "ButtonDown");
+                        break;
+                    }
 
+                    //Handle ButtonUp action for a button on a controller.
+                    case SDL.SDL_EventType.SDL_CONTROLLERBUTTONUP:
+                    {
+                        ie.Button = ev.cbutton.button;
+                        informListeners(ie, "ButtonUp");
+                        break;
+                    }
+                    
+                    //Handle AxisMotion action from joystick.
+                    case SDL.SDL_EventType.SDL_CONTROLLERAXISMOTION:
+                    {
+                        ie.Axis = ev.caxis.axis;
+                        ie.AxisValue = ev.caxis.axisValue;
+                        informListeners(ie, "AxisMotion");
+                        break;
+                    }
+
+                    //Handle adding device while running the program.
+                    case SDL.SDL_EventType.SDL_CONTROLLERDEVICEADDED:
+                    {
+                        connectController(ev.cdevice.which);
+                        break;
+                    }
+
+                    //Handle removing device while running the program.
+                    case SDL.SDL_EventType.SDL_CONTROLLERDEVICEREMOVED:
+                    {
+                        disconnectController(ev.cdevice.which);
+                        break;
+                    }
+                }
             }
         }
     }
