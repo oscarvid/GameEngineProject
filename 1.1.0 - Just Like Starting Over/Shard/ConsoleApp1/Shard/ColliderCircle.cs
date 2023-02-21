@@ -183,8 +183,9 @@ namespace Shard
         public override void drawMe(Color col)
         {
             Display d = Bootstrap.getDisplay();
+            Camera camera = Camera.mainCamera;
 
-            d.drawCircle((int)X, (int)Y, (int)Rad, col);
+            d.drawCircle((int)camera.globalToRelativeX(X), (int)camera.globalToRelativeY(Y), (int)Rad, col);
 
         }
 

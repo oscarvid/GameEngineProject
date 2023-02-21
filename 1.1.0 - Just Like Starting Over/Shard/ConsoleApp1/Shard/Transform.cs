@@ -109,10 +109,7 @@ namespace Shard
 
             right.X = -1 * forward.Y;
             right.Y = forward.X;
-
-
-
-
+            
         }
 
 

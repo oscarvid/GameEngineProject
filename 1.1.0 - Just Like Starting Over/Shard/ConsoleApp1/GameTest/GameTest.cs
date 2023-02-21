@@ -25,6 +25,7 @@ namespace Shard
         public void createShip()
         {
             GameObject ship = new Spaceship();
+            //Camera.mainCamera.Bundle = ship;
             Random rand = new Random();
             int offsetx = 0, offsety = 0;
 
