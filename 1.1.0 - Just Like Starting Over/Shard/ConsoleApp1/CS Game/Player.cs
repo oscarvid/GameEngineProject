@@ -34,38 +34,30 @@ namespace GameCS
 
         public void handleInput(InputEvent inp, string eventType)
         {
-            if (eventType == "ButtonDown")
+            if (eventType == "AxisMotion")
             {
 
-                if (inp.Button == (int)SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_B)
+                if (inp.Axis == (int)SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_LEFTX)
                 {
-                    System.Console.WriteLine("B Pressed");
-                    right = true;
-                    sprite = "right";
-
-                }
-
-                if (inp.Button == (int)SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_X)
-                {
-                    System.Console.WriteLine("X Pressed");
-                    left = true;
-                    sprite = "left";
-                }
-
-            }
-
-            else if (eventType == "ButtonUp")
-            {
-
-                if (inp.Button == (int)SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_B)
-                {
-                    right = false;
-
-                }
-
-                if (inp.Button == (int)SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_X)
-                {
-                    left = false;
+                    if (inp.AxisValue > 0)
+                    {
+                        right = true;
+                        left = false;
+                        sprite = "right";
+                    }
+                    
+                    else if (inp.AxisValue < 0)
+                    {
+                        right = false;
+                        left = true;
+                        sprite = "left";
+                    }
+                   
+                    else
+                    {
+                        right = false;
+                        left = false;
+                    }
                 }
             }
         }
