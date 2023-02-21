@@ -70,12 +70,13 @@ namespace Shard
                 //Handle ButtonDown action for a button on a controller.
                 if (ev.type == SDL.SDL_EventType.SDL_CONTROLLERBUTTONDOWN)
                 {
-                    if (ev.cbutton.button == (byte)SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_A)
-                    {
-                        System.Console.WriteLine("Pressed A!");
-                        ie.Button = (int)ev.cbutton.button;
-                        informListeners(ie, "ButtonDown");
-                    }
+                    ie.Button = (int)ev.cbutton.button;
+                    informListeners(ie, "ButtonDown");
+                }
+                else if (ev.type == SDL.SDL_EventType.SDL_CONTROLLERBUTTONUP)
+                {
+                    ie.Button = (int)ev.cbutton.button;
+                    informListeners(ie, "ButtonUp");
                 }
 
             }
