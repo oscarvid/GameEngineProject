@@ -35,6 +35,7 @@ namespace GameCS
 
         public void handleInput(InputEvent inp, string eventType)
         {
+            //Using joystick.
             if (eventType == "AxisMotion")
             {
 
@@ -59,6 +60,33 @@ namespace GameCS
                         right = false;
                         left = false;
                     }
+                }
+            }
+
+            //Using keyboard.
+            else if(eventType == "KeyDown")
+            {
+                if (inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_D)
+                {
+                    right = true;
+                    sprite = "right";
+                }
+                else if (inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_A)
+                {
+                    left = true;
+                    sprite = "left";
+                }
+            }
+
+            else if (eventType == "KeyUp")
+            {
+                if(inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_D)
+                {
+                    right = false;
+                }
+                else if(inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_A)
+                {
+                    left = false;
                 }
             }
         }

@@ -88,6 +88,11 @@ namespace Shard
 
                 switch (ev.type)
                 {
+
+                    ////////////////////////
+                    //Controller Inputs
+                    ////////////////////////
+
                     //Handle ButtonDown action for a button on a controller.
                     case SDL.SDL_EventType.SDL_CONTROLLERBUTTONDOWN:
                         {
@@ -126,7 +131,67 @@ namespace Shard
                             disconnectController(ev.cdevice.which);
                             break;
                         }
+
+                    
+                    ////////////////////////
+                    //Mouse Inputs
+                    ////////////////////////
+
+                    case SDL.SDL_EventType.SDL_MOUSEBUTTONDOWN:
+                        {
+                            ie.Button = ev.button.button;
+                            ie.X = ev.button.x;
+                            ie.Y = ev.button.y;
+                            informListeners(ie, "MouseDown");
+                            break;
+                        }
+
+                    case SDL.SDL_EventType.SDL_MOUSEBUTTONUP:
+                        {
+                            ie.Button = ev.button.button;
+                            ie.X = ev.button.x;
+                            ie.Y = ev.button.y;
+                            informListeners(ie, "MouseUp");
+                            break;
+                        }
+
+                    case SDL.SDL_EventType.SDL_MOUSEMOTION:
+                        {
+                            ie.X = ev.motion.x;
+                            ie.Y = ev.motion.y;
+                            informListeners(ie, "MouseMotion");
+                            break;
+                        }
+
+                    case SDL.SDL_EventType.SDL_MOUSEWHEEL:
+                        {
+                            ie.X = (int)ev.wheel.direction * ev.wheel.x;
+                            ie.Y = (int)ev.wheel.direction * ev.wheel.y;
+                            informListeners(ie, "MouseWheel");
+                            break;
+                        }
+
+
+                    ////////////////////////
+                    //Mouse Inputs
+                    ////////////////////////
+
+                    case SDL.SDL_EventType.SDL_KEYDOWN:
+                        {
+                            ie.Key = (int)ev.key.keysym.scancode;
+                            informListeners(ie, "KeyDown");
+                            break;
+                        }
+
+                    case SDL.SDL_EventType.SDL_KEYUP:
+                        {
+                            ie.Key = (int)ev.key.keysym.scancode;
+                            informListeners(ie, "KeyUp");
+                            break;
+                        }
                 }
+                
+                //tick -= timeInterval;
             }
         }
     }
