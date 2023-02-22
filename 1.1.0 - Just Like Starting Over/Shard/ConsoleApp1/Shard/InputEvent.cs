@@ -9,6 +9,12 @@
 *   
 */
 
+
+/*
+ * Added support for controllers by introducing axis and axisValue.
+ * Oscar Arvidson
+ */
+
 namespace Shard
 {
     class InputEvent
@@ -17,6 +23,8 @@ namespace Shard
         private int y;
         private int button;
         private int key;
+        private int axis;
+        private int axisValue; 
         private string classification;
 
         public int X
@@ -43,6 +51,18 @@ namespace Shard
         {
             get => key;
             set => key = value;
+        }
+
+        public int Axis
+        {
+            get => axis;
+            set => axis = value;
+        }
+
+        public int AxisValue
+        {
+            get => axisValue;
+            set => axisValue = value;
         }
     }
 }
