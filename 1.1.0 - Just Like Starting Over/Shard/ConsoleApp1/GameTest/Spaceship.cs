@@ -1,6 +1,7 @@
 ﻿using SDL2;
 using Shard;
 using System.Drawing;
+using System;
 
 namespace GameTest
 {
@@ -60,9 +61,6 @@ namespace GameTest
 
         public void handleInput(InputEvent inp, string eventType)
         {
-
-
-
             if (eventType == "KeyDown")
             {
                 if (inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_W)
@@ -107,8 +105,6 @@ namespace GameTest
                 {
                     turnLeft = false;
                 }
-
-
             }
 
 
@@ -137,7 +133,7 @@ namespace GameTest
 
             if (up)
             {
-
+                //Console.WriteLine ("move up");
                 MyBody.addForce(this.Transform.Forward, 0.5f);
 
             }
@@ -146,8 +142,7 @@ namespace GameTest
             {
                 MyBody.addForce(this.Transform.Forward, -0.2f);
             }
-
-
+            
         }
 
         public override void update()

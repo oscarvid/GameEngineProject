@@ -197,13 +197,18 @@ namespace Shard
         public override void drawMe(Color col)
         {
             Display d = Bootstrap.getDisplay();
+            Camera camera = Camera.mainCamera;
+            // d.drawLine((int)MinAndMaxX[0], (int)MinAndMaxY[0], (int)MinAndMaxX[1], (int)MinAndMaxY[0], col);
+            // d.drawLine((int)MinAndMaxX[0], (int)MinAndMaxY[0], (int)MinAndMaxX[0], (int)MinAndMaxY[1], col);
+            // d.drawLine((int)MinAndMaxX[1], (int)MinAndMaxY[0], (int)MinAndMaxX[1], (int)MinAndMaxY[1], col);
+            // d.drawLine((int)MinAndMaxX[0], (int)MinAndMaxY[1], (int)MinAndMaxX[1], (int)MinAndMaxY[1], col);
+            
+            d.drawLine((int)camera.globalToRelativeX(MinAndMaxX[0]), (int)camera.globalToRelativeY(MinAndMaxY[0]), (int)camera.globalToRelativeX(MinAndMaxX[1]), (int)camera.globalToRelativeY(MinAndMaxY[0]), col);
+            d.drawLine((int)camera.globalToRelativeX(MinAndMaxX[0]), (int)camera.globalToRelativeY(MinAndMaxY[0]), (int)camera.globalToRelativeX(MinAndMaxX[0]), (int)camera.globalToRelativeY(MinAndMaxY[1]), col);
+            d.drawLine((int)camera.globalToRelativeX(MinAndMaxX[1]), (int)camera.globalToRelativeY(MinAndMaxY[0]), (int)camera.globalToRelativeX(MinAndMaxX[1]), (int)camera.globalToRelativeY(MinAndMaxY[1]), col);
+            d.drawLine((int)camera.globalToRelativeX(MinAndMaxX[0]), (int)camera.globalToRelativeY(MinAndMaxY[1]), (int)camera.globalToRelativeX(MinAndMaxX[1]), (int)camera.globalToRelativeY(MinAndMaxY[1]), col);
 
-            d.drawLine((int)MinAndMaxX[0], (int)MinAndMaxY[0], (int)MinAndMaxX[1], (int)MinAndMaxY[0], col);
-            d.drawLine((int)MinAndMaxX[0], (int)MinAndMaxY[0], (int)MinAndMaxX[0], (int)MinAndMaxY[1], col);
-            d.drawLine((int)MinAndMaxX[1], (int)MinAndMaxY[0], (int)MinAndMaxX[1], (int)MinAndMaxY[1], col);
-            d.drawLine((int)MinAndMaxX[0], (int)MinAndMaxY[1], (int)MinAndMaxX[1], (int)MinAndMaxY[1], col);
-
-            d.drawCircle((int)X, (int)Y, 2, col);
+            d.drawCircle((int)camera.globalToRelativeX(X), (int)camera.globalToRelativeY(Y), 2, col);
         }
 
         public override Vector2? checkCollision(ColliderCircle c)

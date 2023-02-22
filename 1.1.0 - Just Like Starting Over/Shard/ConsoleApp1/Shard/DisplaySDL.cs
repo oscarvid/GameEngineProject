@@ -59,7 +59,7 @@ namespace Shard
 
         protected override void initializeWindow()
         {
-            setSize(864, 864);
+            setSize(800, 600);
             _window = SDL.SDL_CreateWindow("Game Engine",
                 SDL.SDL_WINDOWPOS_CENTERED,
                 SDL.SDL_WINDOWPOS_CENTERED,
@@ -239,8 +239,10 @@ namespace Shard
                 sRect.w = (int)(trans.Wid * trans.Scalex);
                 sRect.h = (int)(trans.Ht * trans.Scaley);
 
-                tRect.x = (int)trans.X;
-                tRect.y = (int)trans.Y;
+                //tRect.x = (int)trans.X;
+                //tRect.y = (int)trans.Y;
+                tRect.x = (int)Camera.mainCamera.globalToRelativeX(trans.X);
+                tRect.y = (int)Camera.mainCamera.globalToRelativeY(trans.Y);
                 tRect.w = sRect.w;
                 tRect.h = sRect.h;
 

@@ -15,6 +15,8 @@ namespace Shard
 {
     class GameObject
     {
+        //private Transform3D relativeTransform;
+        //private Transform3D globalTransform;
         private Transform3D transform;
         private bool transient;
         private bool toBeDestroyed;
@@ -72,6 +74,8 @@ namespace Shard
 
         internal Transform3D Transform
         {
+            //get => camera.global2Relative
+            //get => Camera.mainCamera.global2Relative(transform, this);
             get => transform;
         }
 

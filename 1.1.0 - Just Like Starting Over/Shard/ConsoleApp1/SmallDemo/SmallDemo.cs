@@ -10,8 +10,8 @@ namespace Shard
 {
     class SmallDemo: Game, InputListener
     {
-        GameObject background;
-
+        //GameObject background;
+        
         public override void update()
         {
             Bootstrap.getDisplay().showText("FPS: " + Bootstrap.getSecondFPS() + " / " + Bootstrap.getFPS(), 10, 10, 12, 255, 255, 255);
@@ -30,12 +30,17 @@ namespace Shard
         public void createHero()
         {
             GameObject hero = new Hero();
-
+            Camera.mainCamera.Bundle = hero;
         }
 
         public void createbackground()
         {
             GameObject bg = new Background();
+        }
+
+        public void createCamera()
+        {
+            Camera mainCamera = new Camera();
         }
 
         public override void initialize()
