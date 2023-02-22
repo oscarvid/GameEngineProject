@@ -20,11 +20,7 @@ namespace SmallDemo
 
         public override void update()
         {
-            // Tuple<float, float> relativeTrans =
-            //     Camera.mainCamera.global2Relative(this.Transform.X, this.Transform.Y);
-            // this.Transform.X = relativeTrans.Item1;
-            // this.Transform.Y = relativeTrans.Item2;
-            Console.WriteLine("Background: X:" + this.Transform.X + "Y:" + this.Transform.Y);
+            //Console.WriteLine("Background: X:" + this.Transform.X + "Y:" + this.Transform.Y);
             Bootstrap.getDisplay().addToDraw(this);
         }
     

@@ -10,11 +10,13 @@ namespace SmallDemo
     class Hero: GameObject, InputListener, CollisionHandler
     {
         bool left, right;
+        private int picNumber = 0;
+        private string pic = "mountain-%NUM%.png";
         public override void initialize()
         {
             this.Transform.X = 400.0f;
             this.Transform.Y = 300.0f;
-            this.Transform.SpritePath = Bootstrap.getAssetManager().getAssetPath("right1.png");
+            this.Transform.SpritePath = Bootstrap.getAssetManager().getAssetPath(pic.Replace("%NUM%", picNumber.ToString()));
 
             Bootstrap.getInput().addListener(this);
 
@@ -80,13 +82,16 @@ namespace SmallDemo
 
             if (left)
             {
-                MyBody.addForce(this.Transform.Forward, -0.05f);
+                MyBody.addForce(this.Transform.Forward, -0.1f);
             }
         }
 
         public override void update()
         {
-            Console.WriteLine("Hero: X:" + this.Transform.X + "Y:" + this.Transform.Y);
+            picNumber++;
+            picNumber = picNumber % 60;
+            Transform.SpritePath = Bootstrap.getAssetManager().getAssetPath(pic.Replace("%NUM%", (picNumber / 10).ToString()));
+            //Console.WriteLine("Hero: X:" + this.Transform.X + "Y:" + this.Transform.Y);
             Bootstrap.getDisplay().addToDraw(this);
         }
         
