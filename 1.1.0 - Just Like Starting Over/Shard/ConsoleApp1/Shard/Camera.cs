@@ -8,21 +8,21 @@ namespace Shard
 {
     class Camera: GameObject
     {
-        private int width = 800, height = 600;
+        private int width, height;
         private GameObject bundle;
         public static Camera mainCamera = new Camera();
         public override void initialize()
         {
             //this.Transform.X = bundle.Transform.X;
             //this.Transform.Y = bundle.Transform.Y;
-            width = 800;
-            height = 600;
+            width = 600;
+            height = 400;
         }
 
         public override void update()
         {
             Transform.X = bundle.Transform.X - width / 2;
-            Transform.Y = bundle.Transform.Y - height / 2;
+            //Transform.Y = bundle.Transform.Y - height / 2;
             Console.WriteLine("Camera: X:" + this.Transform.X + "Y:" + this.Transform.Y);
         }
 

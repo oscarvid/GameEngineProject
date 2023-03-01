@@ -18,8 +18,8 @@ namespace SmallDemo
         private AnimationCollection mountain = new AnimationCollection();
         public override void initialize()
         {
-            this.Transform.X = 400.0f;
-            this.Transform.Y = 300.0f;
+            this.Transform.X = 300.0f;
+            this.Transform.Y = 250.0f;
             mountain.addAnimation("right", () => new Animation("mountain-", 6, 0.6));
             mountain.addAnimation("left", () => new Animation("mountain-left-", 6, 0.6));
             mountain.addAnimation("rightattack1", () => new Animation("mountain-attack-", 6, 0.6));
@@ -80,9 +80,16 @@ namespace SmallDemo
                 
                 if (inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_L)
                 {
+                    mountain.repeatAnimtaion(direction + "attack1", 1);
+                }
+                if (inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_J)
+                {
                     mountain.repeatAnimtaion(direction + "attack2", 1);
                 }
-
+                if (inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_K)
+                {
+                    mountain.repeatAnimtaion(direction + "attack3", 1);
+                }
             }
             else if (eventType == "KeyUp")
             {

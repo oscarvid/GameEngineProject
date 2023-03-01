@@ -59,7 +59,7 @@ namespace Shard
 
         protected override void initializeWindow()
         {
-            setSize(800, 600);
+            setSize(600, 400);
             _window = SDL.SDL_CreateWindow("Game Engine",
                 SDL.SDL_WINDOWPOS_CENTERED,
                 SDL.SDL_WINDOWPOS_CENTERED,
