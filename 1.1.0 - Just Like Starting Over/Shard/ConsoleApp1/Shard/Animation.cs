@@ -8,7 +8,7 @@ namespace Shard
         private int sum;
         private int current;
         private double loop;
-        private long start;
+        //private long start;
         private double spriteTimer;
         private double deltaTime;
 
@@ -22,12 +22,12 @@ namespace Shard
             spriteTimer = 0;
         }
 
-        public string startAnimation()
-        {
-            start = DateTime.Now.ToFileTime();
-            current = 0;
-            return sprite + "0.png";
-        }
+        // public string startAnimation()
+        // {
+        //     start = DateTime.Now.ToFileTime();
+        //     current = 0;
+        //     return sprite + "0.png";
+        // }
         
         public void update()
         {

@@ -8,11 +8,14 @@ namespace Shard
         //private Dictionary<string, Animation> animationList = new Dictionary<string, Animation>();
         private Dictionary<string, Func<Animation>> animationList = new Dictionary<string, Func<Animation>>();
         private Animation currentAnimation, tmp;
-        private bool once;
+        private int repeat;
+        private bool isChecked, isTemporary;
 
         public AnimationCollection()
         {
-            once = false;
+            repeat = -1;
+            isChecked = false;
+            isTemporary = false;
         }
 
         public void addAnimation(string name, Func<Animation> func)
@@ -23,6 +26,7 @@ namespace Shard
         public void updateCurrentAnimation(string sprite)
         {
             currentAnimation = animationList[sprite]();
+            isTemporary = false;
         }
 
         public void update()
@@ -30,21 +34,35 @@ namespace Shard
             currentAnimation.update();
         }
 
-        public void executeOnce(string sprite)
+        public void repeatAnimtaion(string sprite, int rep)
         {
-            tmp = currentAnimation;
+            if (!isTemporary)
+            {
+                tmp = currentAnimation;//how decide
+            }
             currentAnimation = animationList[sprite]();
-            once = true;
+            repeat = rep;
+            isTemporary = true;
         }
 
         public string getCurrentSprite()
         {
             int currentFrame = currentAnimation.Current;
             string currentSprite = currentAnimation.getCurrentSprite();
-            if (once && (currentFrame + 1) == currentAnimation.Sum)
+            Console.WriteLine("repeat:" + repeat + "currentFrame:" + currentFrame + "Sum:" + currentAnimation.Sum);
+            if (repeat > 0 && (currentFrame + 1) < currentAnimation.Sum && isChecked)
             {
-                currentAnimation = tmp;
-                once = false;
+                isChecked = false;
+            }
+            if (repeat >= 0 && (currentFrame + 1) == currentAnimation.Sum && !isChecked)
+            {
+                repeat--;
+                if (repeat == 0)
+                {
+                    repeat = -1;
+                    currentAnimation = tmp;
+                }
+                isChecked = true;
             }
             return currentSprite;
         }

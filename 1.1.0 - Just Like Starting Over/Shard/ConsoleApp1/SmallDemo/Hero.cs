@@ -22,9 +22,14 @@ namespace SmallDemo
             this.Transform.Y = 300.0f;
             mountain.addAnimation("right", () => new Animation("mountain-", 6, 0.6));
             mountain.addAnimation("left", () => new Animation("mountain-left-", 6, 0.6));
-            mountain.addAnimation("rightattack", () => new Animation("mountain-attack-", 6, 0.6));
-            mountain.addAnimation("leftattack", () => new Animation("mountain-left-attack-", 6, 0.6));
+            mountain.addAnimation("rightattack1", () => new Animation("mountain-attack-", 6, 0.6));
+            mountain.addAnimation("leftattack1", () => new Animation("mountain-left-attack-", 6, 0.6));
+            mountain.addAnimation("rightattack2", () => new Animation("mountain-attack2-", 6, 0.8));
+            mountain.addAnimation("leftattack2", () => new Animation("mountain-left-attack2-", 6, 0.8));
+            mountain.addAnimation("rightattack3", () => new Animation("mountain-attack3-", 6, 1));
+            mountain.addAnimation("leftattack3", () => new Animation("mountain-left-attack3-", 6, 1));
             mountain.updateCurrentAnimation("right");
+            direction = "left";
             // sprite = "mountain-";
             // spriteTimer = 0;
             // spriteCounter = 1;
@@ -75,7 +80,7 @@ namespace SmallDemo
                 
                 if (inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_L)
                 {
-                    mountain.executeOnce(direction + "attack");
+                    mountain.repeatAnimtaion(direction + "attack2", 1);
                 }
 
             }
@@ -112,9 +117,7 @@ namespace SmallDemo
 
         public override void update()
         {
-            //Transform.SpritePath = Bootstrap.getAssetManager().getAssetPath(pic.Replace("%NUM%", (picNumber / 10).ToString()));
-            //Console.WriteLine("Hero: X:" + this.Transform.X + "Y:" + this.Transform.Y);
-            
+
             // if (spriteTimer > 0.1f)
             // {
             //     spriteTimer -= 0.1f;
