@@ -11,7 +11,7 @@ namespace Shard
         public override void initialize()
         {
             tick = 0;
-            timeInterval = 1.0 / 60.0;
+            timeInterval = 1.0 / 600.0;
             SDL.SDL_Init(SDL.SDL_INIT_GAMECONTROLLER);
             connectControllers();
         }
@@ -25,7 +25,7 @@ namespace Shard
                 if (SDL.SDL_IsGameController(i) == SDL.SDL_bool.SDL_TRUE)
                 {
                     SDL.SDL_GameControllerOpen(i);
-                    System.Console.WriteLine("Controller " + i + " Connected!");
+                    //System.Console.WriteLine("Controller " + i + " Connected!");
                 }
             }
 
@@ -68,8 +68,11 @@ namespace Shard
 
             tick += Bootstrap.getDeltaTime();
 
+            //System.Console.WriteLine(tick + " " + timeInterval);
+
             if (tick < timeInterval)
             {
+               
                 return;
             }
 
@@ -173,7 +176,7 @@ namespace Shard
 
 
                     ////////////////////////
-                    //Mouse Inputs
+                    //Keyboard Inputs
                     ////////////////////////
 
                     case SDL.SDL_EventType.SDL_KEYDOWN:
@@ -191,7 +194,7 @@ namespace Shard
                         }
                 }
                 
-                //tick -= timeInterval;
+                tick -= timeInterval;
             }
         }
     }
