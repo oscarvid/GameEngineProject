@@ -1,9 +1,9 @@
-using GameCS;
+using GameJailBreak;
 using System;
 
 namespace Shard
 {
-    class GameCS : Game
+    class GameJailBreak : Game
     {
 
         private GameObject player;
@@ -11,13 +11,13 @@ namespace Shard
 
         public override void initialize()
         {
-            createBackground();
             createPlayer();
+            createBackground();
         }
 
         public override void update()
         {
-            //Bootstrap.getDisplay().showText("FPS: " + Bootstrap.getSecondFPS() + " / " + Bootstrap.getFPS(), 10, 10, 12, 255, 255, 255);
+
         }
 
         private void createPlayer()
@@ -28,8 +28,10 @@ namespace Shard
 
         private void createBackground()
         {
-            background = new Background(); 
+            background = new Background();
+
         }
+
 
     }
 }
