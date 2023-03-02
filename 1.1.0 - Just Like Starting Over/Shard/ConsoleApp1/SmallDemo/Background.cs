@@ -13,7 +13,7 @@ namespace SmallDemo
         {
             this.Transform.X = 0.0f;
             this.Transform.Y = 0.0f;
-            this.Transform.SpritePath = Bootstrap.getAssetManager().getAssetPath("background.jpg");
+            this.Transform.SpritePath = Bootstrap.getAssetManager().getAssetPath("bg.png"); //2048 * 400
         
             Bootstrap.getInput().addListener(this);
         }

@@ -10,13 +10,30 @@ namespace SmallDemo
     class Hero: GameObject, InputListener, CollisionHandler
     {
         bool left, right;
-        private int picNumber = 0;
-        private string pic = "mountain-%NUM%.png";
+        private string sprite;
+        //private int spriteCounter, spriteCounterDir;
+        //private double spriteTimer;
+        private string direction;
+        private double speed = 100, jumpSpeed = 260;
+        private AnimationCollection mountain = new AnimationCollection();
         public override void initialize()
         {
-            this.Transform.X = 400.0f;
-            this.Transform.Y = 300.0f;
-            this.Transform.SpritePath = Bootstrap.getAssetManager().getAssetPath(pic.Replace("%NUM%", picNumber.ToString()));
+            this.Transform.X = 300.0f;
+            this.Transform.Y = 250.0f;
+            mountain.addAnimation("right", () => new Animation("mountain-", 6, 0.6));
+            mountain.addAnimation("left", () => new Animation("mountain-left-", 6, 0.6));
+            mountain.addAnimation("rightattack1", () => new Animation("mountain-attack-", 6, 0.6));
+            mountain.addAnimation("leftattack1", () => new Animation("mountain-left-attack-", 6, 0.6));
+            mountain.addAnimation("rightattack2", () => new Animation("mountain-attack2-", 6, 0.8));
+            mountain.addAnimation("leftattack2", () => new Animation("mountain-left-attack2-", 6, 0.8));
+            mountain.addAnimation("rightattack3", () => new Animation("mountain-attack3-", 6, 1));
+            mountain.addAnimation("leftattack3", () => new Animation("mountain-left-attack3-", 6, 1));
+            mountain.updateCurrentAnimation("right");
+            direction = "left";
+            // sprite = "mountain-";
+            // spriteTimer = 0;
+            // spriteCounter = 1;
+            // spriteCounterDir = 1;
 
             Bootstrap.getInput().addListener(this);
 
@@ -47,17 +64,32 @@ namespace SmallDemo
                 if (inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_D)
                 {
                     right = true;
-                    //move(3, 1);
-                    //update();
+                    //sprite = "mountain-";
+                    direction = "right";
+                    mountain.updateCurrentAnimation(direction);
                 }
 
                 if (inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_A)
                 {
                     left = true;
-                    //move(4, 1);
-                    //update();
+                    direction = "left";
+                    mountain.updateCurrentAnimation(direction);
+                    //sprite = "mountain-left-";
+                    
                 }
-
+                
+                if (inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_L)
+                {
+                    mountain.repeatAnimtaion(direction + "attack1", 1);
+                }
+                if (inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_J)
+                {
+                    mountain.repeatAnimtaion(direction + "attack2", 1);
+                }
+                if (inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_K)
+                {
+                    mountain.repeatAnimtaion(direction + "attack3", 1);
+                }
             }
             else if (eventType == "KeyUp")
             {
@@ -77,21 +109,42 @@ namespace SmallDemo
         {
             if (right)
             {
-                MyBody.addForce(this.Transform.Forward, 0.1f);
+                //MyBody.addForce(this.Transform.Forward, 0.1f);
+                Transform.translate(1 * speed * Bootstrap.getDeltaTime(), 0);
+                //spriteTimer += Bootstrap.getDeltaTime();
             }
 
             if (left)
             {
-                MyBody.addForce(this.Transform.Forward, -0.1f);
+                Transform.translate(-1 * speed * Bootstrap.getDeltaTime(), 0);
+                //spriteTimer += Bootstrap.getDeltaTime();
+                //MyBody.addForce(this.Transform.Forward, -0.1f);
             }
         }
 
         public override void update()
         {
-            picNumber++;
-            picNumber = picNumber % 60;
-            Transform.SpritePath = Bootstrap.getAssetManager().getAssetPath(pic.Replace("%NUM%", (picNumber / 10).ToString()));
-            //Console.WriteLine("Hero: X:" + this.Transform.X + "Y:" + this.Transform.Y);
+
+            // if (spriteTimer > 0.1f)
+            // {
+            //     spriteTimer -= 0.1f;
+            //     spriteCounter += spriteCounterDir;
+            //
+            //     if (spriteCounter >= 4)
+            //     {
+            //         spriteCounterDir = -1;
+            //     }
+            //
+            //     if (spriteCounter <= 1)
+            //     {
+            //         spriteCounterDir = 1;
+            //     }
+            // }
+            
+            mountain.update();
+            
+            Transform.SpritePath = Bootstrap.getAssetManager().getAssetPath(mountain.getCurrentSprite());
+            
             Bootstrap.getDisplay().addToDraw(this);
         }
         
