@@ -12,7 +12,7 @@ namespace Shard
 
         public override void initialize()
         {
-            //createBackground();
+            createBackground();
             createPlayer();
             createGround();
         }

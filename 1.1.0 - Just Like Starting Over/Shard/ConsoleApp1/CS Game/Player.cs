@@ -10,8 +10,8 @@ namespace GameCS
 
         //Movement variables
         private bool left, right, jumpUp, canJump;
-        private double speed = 100, jumpSpeed = 100, jumpCount;
-        private int deadZone = 9000;
+        private double speed = 100, jumpSpeed = 200, jumpCount;
+        private int deadZone = 9000, health = 100;
         private string action;
         private AnimationCollection mountain = new AnimationCollection();
 
@@ -39,9 +39,8 @@ namespace GameCS
 
             setPhysicsEnabled();
 
-            MyBody.Mass = 2;
+            MyBody.Mass = 1.3f;
             MyBody.UsesGravity = true;
-            MyBody.StopOnCollision = true;
             MyBody.addRectCollider();
             MyBody.Kinematic = false;
             MyBody.DebugColor = Color.Red;
@@ -60,7 +59,6 @@ namespace GameCS
                 {
                     if (inp.AxisValue > deadZone)
                     {
-                        Console.WriteLine("Right");
                         right = true;
                         left = false;
                         action = "right";
@@ -68,7 +66,6 @@ namespace GameCS
                     
                     else if (inp.AxisValue < -deadZone)
                     {
-                        Console.WriteLine("Left");
                         right = false;
                         left = true;
                         action = "left";
@@ -87,9 +84,17 @@ namespace GameCS
             {
                 if(inp.Button == (int)SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_A && canJump)
                 {
-                    Console.WriteLine("Jump");
                     jumpUp = true;
                     canJump = false;
+                }
+
+                if (inp.Button == (int)SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_X)
+                {
+                    Console.WriteLine("Create bullet");
+                    Bullet b = new Bullet();
+                    b.addTag("heroBullet");
+                    b.Transform.X = this.Transform.X + 100;
+                    b.Transform.Y = this.Transform.Y;
                 }
             }
 
@@ -167,7 +172,12 @@ namespace GameCS
             if (x.Parent.checkTag("ground"))
             {
                 canJump = true;
-                Console.WriteLine("Enter");
+            }
+
+            if (x.Parent.checkTag("enemyBullet"))
+            {
+                health -= 10;
+                Console.WriteLine("Current health: " + health);
             }
         }
 
