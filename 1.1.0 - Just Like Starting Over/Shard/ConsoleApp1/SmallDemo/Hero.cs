@@ -205,6 +205,14 @@ namespace SmallDemo
 
             if(special1 && special2)
             {
+                Bullet b1 = new Bullet();
+                float x1 = this.Transform.Centre.X + this.Transform.Wid / 2 + b1.Transform.Wid;
+                b1.shoot(x1, this.Transform.Centre.Y, "right", "heroBullet");
+
+                Bullet b2 = new Bullet();
+                float x2 = this.Transform.X - b2.Transform.Wid - 10;
+                b2.shoot(x2, this.Transform.Centre.Y, "left", "heroBullet");
+
                 mountain.repeatAnimtaion(direction + "attack3", 1);
                 special1 = false;
                 special2 = false;
