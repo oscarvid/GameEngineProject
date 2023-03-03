@@ -8,11 +8,13 @@ namespace Shard
 
         private GameObject player;
         private GameObject background;
+        private GameObject ground;
 
         public override void initialize()
         {
             createBackground();
             createPlayer();
+            createGround();
         }
 
         public override void update()
@@ -28,8 +30,12 @@ namespace Shard
 
         private void createBackground()
         {
-            background = new Background(); 
+            background = new Background();
         }
 
+        private void createGround()
+        {
+            ground = new Ground();
+        }
     }
 }

@@ -1,35 +1,51 @@
 using Shard;
 using SDL2;
+using System;
+using System.Drawing;
 
 namespace GameCS
 {
-    class Player : GameObject, InputListener
+    class Player : GameObject, InputListener, CollisionHandler
     {
 
         //Movement variables
-        private bool left, right;
-        private double speed = 100, jumpSpeed = 260;
-        private int deadZone = 9000;
+        private bool left, right, jumpUp, canJump;
+        private double speed = 100, jumpSpeed = 200, jumpCount;
+        private int deadZone = 9000, health = 100;
+        private string action;
+        private AnimationCollection mountain = new AnimationCollection();
 
         //Sprite variables
-        private string sprite;
-        private int spriteCounter, spriteCounterDir;
-        private double spriteTimer;
 
         public override void initialize()
         {
-            //Initial sprite values.
-            sprite = "right";
-            spriteTimer = 0;
-            spriteCounter = 1;
-            spriteCounterDir = 1;
-
             //Initial movement and position values.
-            this.Transform.X = 500.0f;
-            this.Transform.Y = 500.0f;
-            
+            this.Transform.X = 300.0f;
+            this.Transform.Y = 250.0f;
 
+            //Initial animation setup.
+            action = "right";
+            mountain.addAnimation("right", () => new Animation("mountain-", 6, 0.6));
+            mountain.addAnimation("left", () => new Animation("mountain-left-", 6, 0.6));
+            mountain.addAnimation("rightattack1", () => new Animation("mountain-attack-", 6, 0.6));
+            mountain.addAnimation("leftattack1", () => new Animation("mountain-left-attack-", 6, 0.6));
+            mountain.addAnimation("rightattack2", () => new Animation("mountain-attack2-", 8, 0.8));
+            mountain.addAnimation("leftattack2", () => new Animation("mountain-left-attack2-", 8, 0.8));
+            mountain.addAnimation("rightattack3", () => new Animation("mountain-attack3-", 10, 1));
+            mountain.addAnimation("leftattack3", () => new Animation("mountain-left-attack3-", 10, 1));
+            mountain.updateCurrentAnimation(action);
+            
             Bootstrap.getInput().addListener(this);
+
+            setPhysicsEnabled();
+
+            MyBody.Mass = 1.3f;
+            MyBody.UsesGravity = true;
+            MyBody.addRectCollider();
+            MyBody.Kinematic = false;
+            MyBody.DebugColor = Color.Red;
+
+            addTag("hero");
 
         }
 
@@ -45,21 +61,41 @@ namespace GameCS
                     {
                         right = true;
                         left = false;
-                        sprite = "right";
+                        action = "right";
                     }
                     
                     else if (inp.AxisValue < -deadZone)
                     {
                         right = false;
                         left = true;
-                        sprite = "left";
+                        action = "left";
                     }
                    
                     else
                     {
                         right = false;
                         left = false;
+                        action = "left";
                     }
+                }
+            }
+
+            if (eventType == "ButtonDown")
+            {
+                if(inp.Button == (int)SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_A && canJump)
+                {
+                    jumpUp = true;
+                    canJump = false;
+                }
+
+                if (inp.Button == (int)SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_X)
+                {
+                    Console.WriteLine("Create bullet");
+                    Bullet b = new Bullet();
+                    b.addTag("heroBullet");
+                    b.setDirectionRight();
+                    b.Transform.X = this.Transform.X + 100;
+                    b.Transform.Y = this.Transform.Y;
                 }
             }
 
@@ -69,12 +105,12 @@ namespace GameCS
                 if (inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_D)
                 {
                     right = true;
-                    sprite = "right";
+                    action = "right";
                 }
                 else if (inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_A)
                 {
                     left = true;
-                    sprite = "left";
+                    action = "left";
                 }
             }
 
@@ -91,44 +127,69 @@ namespace GameCS
             }
         }
 
+        public override void physicsUpdate()
+        {
+            
+        }
+
         public override void update()
         {
-            //Movement update.
-            if (left)
-            {
-                this.Transform.translate(-1 * speed * Bootstrap.getDeltaTime(), 0);
-                spriteTimer += Bootstrap.getDeltaTime();
-            }
-
+            //Movement update
             if (right)
             {
-                this.Transform.translate(1 * speed * Bootstrap.getDeltaTime(), 0);
-                spriteTimer += Bootstrap.getDeltaTime();
+                Transform.translate(1 * speed * Bootstrap.getDeltaTime(), 0);
             }
 
-            
-            //Sprite updates.
-
-            if (spriteTimer > 0.1f)
+            if (left)
             {
-                spriteTimer -= 0.1f;
-                spriteCounter += spriteCounterDir;
+                Transform.translate(-1 * speed * Bootstrap.getDeltaTime(), 0);
+            }
 
-                if (spriteCounter >= 4)
+            if (jumpUp)
+            {
+                canJump = false;
+                if (jumpCount < 0.3f)
                 {
-                    spriteCounterDir = -1;
+                    this.Transform.translate(0, -1 * jumpSpeed * Bootstrap.getDeltaTime());
+                    jumpCount += Bootstrap.getDeltaTime();
                 }
-
-                if (spriteCounter <= 1)
+                else
                 {
-                    spriteCounterDir = 1;
+                    jumpCount = 0;
+                    jumpUp = false;
                 }
             }
 
-            this.Transform.SpritePath = Bootstrap.getAssetManager().getAssetPath(sprite + spriteCounter + ".png");
+            //Animation update
+            mountain.update();
+            Transform.SpritePath = Bootstrap.getAssetManager().getAssetPath(mountain.getCurrentSprite());
             
             //Draw to screen.
             Bootstrap.getDisplay().addToDraw(this);
+        }
+
+        public void onCollisionEnter(PhysicsBody x)
+        {
+            if (x.Parent.checkTag("ground"))
+            {
+                canJump = true;
+            }
+
+            if (x.Parent.checkTag("enemyBullet"))
+            {
+                health -= 10;
+                Console.WriteLine("Current health: " + health);
+            }
+        }
+
+        public void onCollisionExit(PhysicsBody x)
+        {
+
+        }
+
+        public void onCollisionStay(PhysicsBody x)
+        {
+       
         }
     }
 }
