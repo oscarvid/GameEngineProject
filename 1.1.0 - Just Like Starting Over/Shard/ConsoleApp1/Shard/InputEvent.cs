@@ -21,8 +21,8 @@ namespace Shard
     {
         private int x;
         private int y;
-        private int button;
-        private int key;
+        private int button = -1;
+        private int key = -1;
         private int axis;
         private int axisValue; 
         private string classification;
