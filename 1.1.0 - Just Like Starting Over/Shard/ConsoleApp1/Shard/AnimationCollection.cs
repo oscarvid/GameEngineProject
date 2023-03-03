@@ -49,7 +49,7 @@ namespace Shard
         {
             int currentFrame = currentAnimation.Current;
             string currentSprite = currentAnimation.getCurrentSprite();
-            Console.WriteLine("repeat:" + repeat + "currentFrame:" + currentFrame + "Sum:" + currentAnimation.Sum);
+            //Console.WriteLine("repeat:" + repeat + "currentFrame:" + currentFrame + "Sum:" + currentAnimation.Sum);
             if (repeat > 0 && (currentFrame + 1) < currentAnimation.Sum && isChecked)
             {
                 isChecked = false;

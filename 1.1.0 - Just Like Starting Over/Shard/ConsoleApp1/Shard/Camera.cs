@@ -23,7 +23,7 @@ namespace Shard
         {
             Transform.X = bundle.Transform.X - width / 2;
             //Transform.Y = bundle.Transform.Y - height / 2;
-            Console.WriteLine("Camera: X:" + this.Transform.X + "Y:" + this.Transform.Y);
+            //Console.WriteLine("Camera: X:" + this.Transform.X + "Y:" + this.Transform.Y);
         }
 
         public float globalToRelativeX(float x)

@@ -8,23 +8,14 @@ using MissileCommand;
 
 namespace Shard
 {
-    class SmallDemo: Game, InputListener
+    class SmallDemo: Game
     {
         //GameObject background;
         
         public override void update()
         {
-            Bootstrap.getDisplay().showText("FPS: " + Bootstrap.getSecondFPS() + " / " + Bootstrap.getFPS(), 10, 10, 12, 255, 255, 255);
+            //Bootstrap.getDisplay().showText("FPS: " + Bootstrap.getSecondFPS() + " / " + Bootstrap.getFPS(), 10, 10, 12, 255, 255, 255);
 
-        }
-
-        public void handleInput(InputEvent inp, string eventType)
-        {
-            if (eventType == "MouseDown")
-            {
-                Console.WriteLine("presspresspresspresspresspressbutton" + inp.Button);
-            }
-            
         }
 
         private void createGround()
@@ -55,7 +46,6 @@ namespace Shard
         }
         public override void initialize()
         {
-            Bootstrap.getInput().addListener(this);
             createbackground();
             createGround();
             createHero();
