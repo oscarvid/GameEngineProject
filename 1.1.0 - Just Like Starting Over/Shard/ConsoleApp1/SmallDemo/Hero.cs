@@ -14,7 +14,6 @@ namespace SmallDemo
         private double speed = 100, jumpSpeed = 260, jumpCount;
         private int deadZone = 9000, health = 100;
 
-
         //Animation variables
         private string direction;
         private AnimationCollection mountain = new AnimationCollection();
@@ -43,8 +42,9 @@ namespace SmallDemo
             setPhysicsEnabled();
             MyBody.addRectCollider();
             MyBody.Mass = 1.3f;
-            //MyBody.UsesGravity = true;
+            MyBody.UsesGravity = true;
             MyBody.Kinematic = false;
+            MyBody.StopOnCollision = true;
             MyBody.DebugColor = Color.Green;
             
             addTag("hero");
@@ -79,8 +79,6 @@ namespace SmallDemo
                     {
                         right = false;
                         left = false;
-                        direction = "left";
-                        mountain.updateCurrentAnimation(direction);
                     }
                 }
             }
@@ -98,17 +96,17 @@ namespace SmallDemo
                 {
                     Console.WriteLine("Create bullet");
                     Bullet b = new Bullet();
-                    b.addTag("heroBullet");
-                    b.setDirection(direction);
                     if (direction == "right")
                     {
-                        b.Transform.X = this.Transform.X + 100;
+                        float x = this.Transform.Centre.X + this.Transform.Wid + 30;
+                        b.shoot(x, this.Transform.Y, direction, "heroBullet");
                     }
                     else
                     {
-                        b.Transform.X = this.Transform.X - 10;
+                        float x = this.Transform.Centre.X - this.Transform.Wid - 30;
+                        b.shoot(x, this.Transform.Y, direction, "heroBullet");
                     }
-                    b.Transform.Y = this.Transform.Y - 10;
+                    
                     mountain.repeatAnimtaion(direction + "attack1", 1);
                 }
             }
@@ -118,7 +116,6 @@ namespace SmallDemo
                 if (inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_D)
                 {
                     right = true;
-                    //sprite = "mountain-";
                     direction = "right";
                     mountain.updateCurrentAnimation(direction);
                 }
@@ -128,8 +125,6 @@ namespace SmallDemo
                     left = true;
                     direction = "left";
                     mountain.updateCurrentAnimation(direction);
-                    //sprite = "mountain-left-";
-                    
                 }
                 
                 if (inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_L)
@@ -137,7 +132,6 @@ namespace SmallDemo
                     Console.WriteLine("Create bullet");
                     Bullet b = new Bullet();
                     b.addTag("heroBullet");
-                    b.setDirection(direction);
                     
                     if(direction == "right")
                     {
@@ -227,13 +221,23 @@ namespace SmallDemo
         
         public void onCollisionExit(PhysicsBody x)
         {
+            if (x.Parent.checkTag("ground"))
+            {
+                MyBody.UsesGravity = true;
+            }
 
             MyBody.DebugColor = Color.Red;
+            
         }
 
         public void onCollisionStay(PhysicsBody x)
         {
             MyBody.DebugColor = Color.Blue;
+            if (x.Parent.checkTag("ground"))
+            {
+                canJump = true;
+                MyBody.UsesGravity = false;
+            }
         }
 
     }

@@ -27,6 +27,11 @@ namespace Shard
             
         }
 
+        private void createGround()
+        {
+            GameObject ground = new Ground();
+        }
+
         public void createHero()
         {
             GameObject hero = new Hero();
@@ -52,6 +57,7 @@ namespace Shard
         {
             Bootstrap.getInput().addListener(this);
             createbackground();
+            createGround();
             createHero();
             createEnemy();
         }

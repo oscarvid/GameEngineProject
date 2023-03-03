@@ -46,7 +46,6 @@ namespace SmallDemo
             setPhysicsEnabled();
 
             MyBody.Mass = 2;
-            MyBody.UsesGravity = false;
             MyBody.StopOnCollision = true;
             MyBody.addRectCollider();
             MyBody.Kinematic = true;
@@ -54,19 +53,16 @@ namespace SmallDemo
 
         }
 
-        public void setDirection(string directon)
+        public void shoot(float xStart, float yStart, string direction, string tag)
         {
-            if(directon == "right")
-            {
-                right = true;
-                left = false;
-            }
+            this.addTag(tag);
+            this.Transform.X = xStart;
+            this.Transform.Y = yStart;
 
-            if (directon == "left")
-            {
-                right = false;
+            if (direction == "right")
+                right = true;
+            else
                 left = true;
-            }
         }
 
         public void onCollisionEnter(PhysicsBody x)
