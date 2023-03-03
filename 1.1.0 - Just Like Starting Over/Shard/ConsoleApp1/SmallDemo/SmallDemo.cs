@@ -38,16 +38,22 @@ namespace Shard
             GameObject bg = new Background();
         }
 
-        public void createCamera()
-        {
-            Camera mainCamera = new Camera();
-        }
+        // public void createCamera()
+        // {
+        //     Camera mainCamera = new Camera();
+        // }
 
+        public void createEnemy()
+        {
+            GameObject enemy2 = new enemy2();
+            GameObject enemy1 = new enemy1();
+        }
         public override void initialize()
         {
             Bootstrap.getInput().addListener(this);
             createbackground();
             createHero();
+            createEnemy();
         }
     }
 }
