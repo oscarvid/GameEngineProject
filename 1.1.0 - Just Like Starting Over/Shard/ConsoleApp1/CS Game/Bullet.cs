@@ -10,9 +10,32 @@ namespace GameCS
 {
     class Bullet : GameObject, CollisionHandler
     {
+        private bool left, right;
         private int speed = 200;
+        private double bulletLifeTime;
         public override void update()
         {
+            //Movement update
+            if (right)
+            {
+                Transform.translate(1 * speed * Bootstrap.getDeltaTime(), 0);
+            }
+
+            if (left)
+            {
+                Transform.translate(-1 * speed * Bootstrap.getDeltaTime(), 0);
+            }
+
+            if (bulletLifeTime < 1)
+            {
+                bulletLifeTime += Bootstrap.getDeltaTime();
+            }
+            else
+            {
+                this.ToBeDestroyed = true;
+                Console.WriteLine("Bullet Destroyed");
+            }
+
             Bootstrap.getDisplay().addToDraw(this);
         }
 
@@ -31,18 +54,29 @@ namespace GameCS
 
         }
 
+        public void setDirectionRight()
+        {
+            right = true;
+            left = false;
+        }
+
+        public void setDirectionLeft()
+        {
+            left = true;
+            right = false;
+        }
         public void onCollisionEnter(PhysicsBody x)
         {
             if (x.Parent.checkTag("hero") && this.checkTag("enemyBullet"))
             {
                 this.ToBeDestroyed = true;
-                Console.WriteLine("Destroyed");
+                Console.WriteLine("Bullet Destroyed");
             }
 
             if (x.Parent.checkTag("enemy") && this.checkTag("heroBullet"))
             {
                 this.ToBeDestroyed = true;
-                Console.WriteLine("Destroyed");
+                Console.WriteLine("Bullet Destroyed");
             }
         }
 

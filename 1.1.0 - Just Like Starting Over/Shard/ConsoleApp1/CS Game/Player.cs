@@ -93,6 +93,7 @@ namespace GameCS
                     Console.WriteLine("Create bullet");
                     Bullet b = new Bullet();
                     b.addTag("heroBullet");
+                    b.setDirectionRight();
                     b.Transform.X = this.Transform.X + 100;
                     b.Transform.Y = this.Transform.Y;
                 }
