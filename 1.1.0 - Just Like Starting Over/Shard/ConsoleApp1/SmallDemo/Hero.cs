@@ -24,10 +24,10 @@ namespace SmallDemo
             mountain.addAnimation("left", () => new Animation("mountain-left-", 6, 0.6));
             mountain.addAnimation("rightattack1", () => new Animation("mountain-attack-", 6, 0.6));
             mountain.addAnimation("leftattack1", () => new Animation("mountain-left-attack-", 6, 0.6));
-            mountain.addAnimation("rightattack2", () => new Animation("mountain-attack2-", 6, 0.8));
-            mountain.addAnimation("leftattack2", () => new Animation("mountain-left-attack2-", 6, 0.8));
-            mountain.addAnimation("rightattack3", () => new Animation("mountain-attack3-", 6, 1));
-            mountain.addAnimation("leftattack3", () => new Animation("mountain-left-attack3-", 6, 1));
+            mountain.addAnimation("rightattack2", () => new Animation("mountain-attack2-", 8, 0.8));
+            mountain.addAnimation("leftattack2", () => new Animation("mountain-left-attack2-", 8, 0.8));
+            mountain.addAnimation("rightattack3", () => new Animation("mountain-attack3-", 10, 1));
+            mountain.addAnimation("leftattack3", () => new Animation("mountain-left-attack3-", 10, 1));
             mountain.updateCurrentAnimation("right");
             direction = "left";
             // sprite = "mountain-";
