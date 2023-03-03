@@ -10,9 +10,12 @@ namespace SmallDemo
     class Hero: GameObject, InputListener, CollisionHandler
     {
         //Movement variables
-        bool left, right, jumpUp, canJump;
+        bool left, right, jumpUp, canJump, shoot;
         private double speed = 100, jumpSpeed = 260, jumpCount;
         private int deadZone = 9000, health = 100;
+
+        //Track pressed buttons
+        bool special1, special2;
 
         //Animation variables
         private string direction;
@@ -53,7 +56,7 @@ namespace SmallDemo
 
         public void handleInput(InputEvent inp, string eventType)
         {
-            //Using joystick.
+            //Joystick input
             if (eventType == "AxisMotion")
             {
 
@@ -83,36 +86,11 @@ namespace SmallDemo
                 }
             }
 
-            //Controller Buttons
-            if (eventType == "ButtonDown")
-            {
-                if (inp.Button == (int)SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_A && canJump)
-                {
-                    jumpUp = true;
-                    canJump = false;
-                }
 
-                if (inp.Button == (int)SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_X)
-                {
-                    Console.WriteLine("Create bullet");
-                    Bullet b = new Bullet();
-                    if (direction == "right")
-                    {
-                        float x = this.Transform.Centre.X + this.Transform.Wid + 30;
-                        b.shoot(x, this.Transform.Y, direction, "heroBullet");
-                    }
-                    else
-                    {
-                        float x = this.Transform.Centre.X - this.Transform.Wid - 30;
-                        b.shoot(x, this.Transform.Y, direction, "heroBullet");
-                    }
-                    
-                    mountain.repeatAnimtaion(direction + "attack1", 1);
-                }
-            }
-
-            if (eventType == "KeyDown")
+            //Button or Key Down
+            if (eventType == "ButtonDown" || eventType == "KeyDown")
             {
+                //Walk right
                 if (inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_D)
                 {
                     right = true;
@@ -120,56 +98,68 @@ namespace SmallDemo
                     mountain.updateCurrentAnimation(direction);
                 }
 
-                if (inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_A)
+                //Walk left
+                else if (inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_A)
                 {
                     left = true;
                     direction = "left";
                     mountain.updateCurrentAnimation(direction);
                 }
-                
-                if (inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_L)
+
+                //Jumping
+                else if ((inp.Button == (int)SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_A && canJump) || (inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_W && canJump))
                 {
-                    Console.WriteLine("Create bullet");
-                    Bullet b = new Bullet();
-                    b.addTag("heroBullet");
-                    
-                    if(direction == "right")
-                    {
-                        b.Transform.X = this.Transform.X + 100;
-                    }
-                    else
-                    {
-                        b.Transform.X = this.Transform.X;
-                    }
-                    b.Transform.Y = this.Transform.Y - 10;
-                    mountain.repeatAnimtaion(direction + "attack1", 1);
-                }
-                if (inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_J)
-                {
-                    mountain.repeatAnimtaion(direction + "attack2", 1);
-                }
-                if (inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_K)
-                {
-                    mountain.repeatAnimtaion(direction + "attack3", 1);
-                }
-            }
-            else if (eventType == "KeyUp")
-            {
-                if (inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_D)
-                {
-                    right = false;
+                    jumpUp = true;
+                    canJump = false;
                 }
 
-                if (inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_A)
+                //Attack 1 (Shoot)
+                else if (inp.Button == (int)SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_X || inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_J)
                 {
+                    shoot = true;
+                }
+
+
+                //Check if special 1 is pressed
+                if (inp.Button == (int)SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_Y || inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_K)
+                {
+                    special1 = true;
+                }
+
+                //Check if special 2 is pressed
+                if (inp.Button == (int)SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_B || inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_L)
+                {
+                    special2 = true;
+                }
+            }
+
+            if (eventType == "ButtonUp" || eventType == "KeyUp")
+            {
+                //Stop walk right
+                if (inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_D)
+                    right = false;
+
+                //Stop walk left
+                else if (inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_A)
                     left = false;
+
+                //Check if special 1 is no longer pressed
+                if (inp.Button == (int)SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_Y || inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_K)
+                {
+                    special1 = false;
+                }
+
+                //Check if special 2 is no longer pressed
+                if (inp.Button == (int)SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_B || inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_L)
+                {
+                    special2 = false;
                 }
             }
         }
 
         public override void update()
         {
-            //Movement update
+            //Inputs update
             if (right)
             {
                 Transform.translate(1 * speed * Bootstrap.getDeltaTime(), 0);
@@ -193,6 +183,31 @@ namespace SmallDemo
                     jumpCount = 0;
                     jumpUp = false;
                 }
+            }
+
+            if (shoot)
+            {
+                Bullet b = new Bullet();
+                if (direction == "right")
+                {
+                    float x = this.Transform.Centre.X + this.Transform.Wid / 2 + b.Transform.Wid;
+                    b.shoot(x, this.Transform.Centre.Y, direction, "heroBullet");
+                }
+                else
+                {
+                    float x = this.Transform.X - b.Transform.Wid - 10;
+                    b.shoot(x, this.Transform.Centre.Y, direction, "heroBullet");
+                }
+
+                mountain.repeatAnimtaion(direction + "attack1", 1);
+                shoot = false;
+            }
+
+            if(special1 && special2)
+            {
+                mountain.repeatAnimtaion(direction + "attack3", 1);
+                special1 = false;
+                special2 = false;
             }
 
             //Animation update
@@ -221,10 +236,14 @@ namespace SmallDemo
         
         public void onCollisionExit(PhysicsBody x)
         {
-            if (x.Parent.checkTag("ground"))
+            if(x != null)
             {
-                MyBody.UsesGravity = true;
+                if (x.Parent.checkTag("ground"))
+                {
+                    MyBody.UsesGravity = true;
+                }
             }
+            
 
             MyBody.DebugColor = Color.Red;
             
@@ -239,6 +258,5 @@ namespace SmallDemo
                 MyBody.UsesGravity = false;
             }
         }
-
     }
 }
