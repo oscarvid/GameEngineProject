@@ -9,17 +9,23 @@ namespace SmallDemo
 {
     class Hero: GameObject, InputListener, CollisionHandler
     {
-        bool left, right;
-        private string sprite;
-        //private int spriteCounter, spriteCounterDir;
-        //private double spriteTimer;
+        //Movement variables
+        bool left, right, jumpUp, canJump;
+        private double speed = 100, jumpSpeed = 260, jumpCount;
+        private int deadZone = 9000, health = 100;
+
+
+        //Animation variables
         private string direction;
-        private double speed = 100, jumpSpeed = 260;
         private AnimationCollection mountain = new AnimationCollection();
         public override void initialize()
         {
+            //Initial movement and position values
             this.Transform.X = 300.0f;
             this.Transform.Y = 250.0f;
+
+            //Initial animation setup
+            direction = "right";
             mountain.addAnimation("right", () => new Animation("mountain-", 6, 0.6));
             mountain.addAnimation("left", () => new Animation("mountain-left-", 6, 0.6));
             mountain.addAnimation("rightattack1", () => new Animation("mountain-attack-", 6, 0.6));
@@ -28,37 +34,85 @@ namespace SmallDemo
             mountain.addAnimation("leftattack2", () => new Animation("mountain-left-attack2-", 8, 0.8));
             mountain.addAnimation("rightattack3", () => new Animation("mountain-attack3-", 10, 1));
             mountain.addAnimation("leftattack3", () => new Animation("mountain-left-attack3-", 10, 1));
-            mountain.updateCurrentAnimation("right");
-            direction = "left";
-            // sprite = "mountain-";
-            // spriteTimer = 0;
-            // spriteCounter = 1;
-            // spriteCounterDir = 1;
+            mountain.updateCurrentAnimation(direction);
 
+            //Add input listener
             Bootstrap.getInput().addListener(this);
 
-            left = false;
-            right = false;
-            
+            //Initial physics setup
             setPhysicsEnabled();
-            
-            MyBody.Mass = 2;
-            MyBody.MaxForce = 10;
-            MyBody.AngularDrag = 0.01f;
-            MyBody.Drag = 0f;
-            MyBody.StopOnCollision = false;
-            MyBody.ReflectOnCollision = false;
-            MyBody.ImpartForce = false;
-            MyBody.Kinematic = false;
-            
             MyBody.addRectCollider();
-
+            MyBody.Mass = 1.3f;
+            //MyBody.UsesGravity = true;
+            MyBody.Kinematic = false;
+            MyBody.DebugColor = Color.Green;
+            
             addTag("hero");
 
         }
 
         public void handleInput(InputEvent inp, string eventType)
         {
+            //Using joystick.
+            if (eventType == "AxisMotion")
+            {
+
+                if (inp.Axis == (int)SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_LEFTX)
+                {
+                    if (inp.AxisValue > deadZone)
+                    {
+                        right = true;
+                        left = false;
+                        direction = "right";
+                        mountain.updateCurrentAnimation(direction);
+                    }
+
+                    else if (inp.AxisValue < -deadZone)
+                    {
+                        right = false;
+                        left = true;
+                        direction = "left";
+                        mountain.updateCurrentAnimation(direction);
+                    }
+
+                    else
+                    {
+                        right = false;
+                        left = false;
+                        direction = "left";
+                        mountain.updateCurrentAnimation(direction);
+                    }
+                }
+            }
+
+            //Controller Buttons
+            if (eventType == "ButtonDown")
+            {
+                if (inp.Button == (int)SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_A && canJump)
+                {
+                    jumpUp = true;
+                    canJump = false;
+                }
+
+                if (inp.Button == (int)SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_X)
+                {
+                    Console.WriteLine("Create bullet");
+                    Bullet b = new Bullet();
+                    b.addTag("heroBullet");
+                    b.setDirection(direction);
+                    if (direction == "right")
+                    {
+                        b.Transform.X = this.Transform.X + 100;
+                    }
+                    else
+                    {
+                        b.Transform.X = this.Transform.X - 10;
+                    }
+                    b.Transform.Y = this.Transform.Y - 10;
+                    mountain.repeatAnimtaion(direction + "attack1", 1);
+                }
+            }
+
             if (eventType == "KeyDown")
             {
                 if (inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_D)
@@ -80,6 +134,20 @@ namespace SmallDemo
                 
                 if (inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_L)
                 {
+                    Console.WriteLine("Create bullet");
+                    Bullet b = new Bullet();
+                    b.addTag("heroBullet");
+                    b.setDirection(direction);
+                    
+                    if(direction == "right")
+                    {
+                        b.Transform.X = this.Transform.X + 100;
+                    }
+                    else
+                    {
+                        b.Transform.X = this.Transform.X;
+                    }
+                    b.Transform.Y = this.Transform.Y - 10;
                     mountain.repeatAnimtaion(direction + "attack1", 1);
                 }
                 if (inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_J)
@@ -105,61 +173,62 @@ namespace SmallDemo
             }
         }
 
-        public override void physicsUpdate()
+        public override void update()
         {
+            //Movement update
             if (right)
             {
-                //MyBody.addForce(this.Transform.Forward, 0.1f);
                 Transform.translate(1 * speed * Bootstrap.getDeltaTime(), 0);
-                //spriteTimer += Bootstrap.getDeltaTime();
             }
 
             if (left)
             {
                 Transform.translate(-1 * speed * Bootstrap.getDeltaTime(), 0);
-                //spriteTimer += Bootstrap.getDeltaTime();
-                //MyBody.addForce(this.Transform.Forward, -0.1f);
             }
-        }
 
-        public override void update()
-        {
+            if (jumpUp)
+            {
+                canJump = false;
+                if (jumpCount < 0.3f)
+                {
+                    this.Transform.translate(0, -1 * jumpSpeed * Bootstrap.getDeltaTime());
+                    jumpCount += Bootstrap.getDeltaTime();
+                }
+                else
+                {
+                    jumpCount = 0;
+                    jumpUp = false;
+                }
+            }
 
-            // if (spriteTimer > 0.1f)
-            // {
-            //     spriteTimer -= 0.1f;
-            //     spriteCounter += spriteCounterDir;
-            //
-            //     if (spriteCounter >= 4)
-            //     {
-            //         spriteCounterDir = -1;
-            //     }
-            //
-            //     if (spriteCounter <= 1)
-            //     {
-            //         spriteCounterDir = 1;
-            //     }
-            // }
-            
+            //Animation update
             mountain.update();
-            
             Transform.SpritePath = Bootstrap.getAssetManager().getAssetPath(mountain.getCurrentSprite());
-            
+
+            //Draw to screen.
             Bootstrap.getDisplay().addToDraw(this);
         }
         
         public void onCollisionEnter(PhysicsBody x)
         {
-            if (x.Parent.checkTag("Bullet") == false)
+            if (x.Parent.checkTag("ground"))
             {
-                MyBody.DebugColor = Color.Red;
+                canJump = true;
             }
+
+            if (x.Parent.checkTag("enemyBullet"))
+            {
+                health -= 10;
+                Console.WriteLine("Current health: " + health);
+            }
+
+            MyBody.DebugColor = Color.Green;
         }
         
         public void onCollisionExit(PhysicsBody x)
         {
 
-            MyBody.DebugColor = Color.Green;
+            MyBody.DebugColor = Color.Red;
         }
 
         public void onCollisionStay(PhysicsBody x)
