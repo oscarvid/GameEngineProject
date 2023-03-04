@@ -58,6 +58,7 @@ namespace Shard
         {
             GameObject enemy2 = new enemy2();
             GameObject enemy1 = new enemy1();
+            Enemy1_1 enemy1_1 = new Enemy1_1();
         }
         
         public void createWin()

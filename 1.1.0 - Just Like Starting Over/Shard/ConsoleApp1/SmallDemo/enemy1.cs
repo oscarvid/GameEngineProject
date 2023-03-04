@@ -18,7 +18,7 @@ namespace SmallDemo
         {
             this.Transform.X = 500.0f;
             this.Transform.Y = 253.0f;
-            enemyTwo.addAnimation("right", () => new Animation("enemy1-right-", 10, 1.2));
+            enemyTwo.addAnimation("right", () => new Animation("enemy1-right-", 9, 1.2));
             enemyTwo.addAnimation("left", () => new Animation("enemy1-left-", 10, 1.2));
             enemyTwo.addAnimation("rightattack", () => new Animation("enemy1-attack-right-", 10, 1.2));
             enemyTwo.addAnimation("leftattack", () => new Animation("enemy1-attack-left-", 10, 1.2));
@@ -41,7 +41,7 @@ namespace SmallDemo
             MyBody.ReflectOnCollision = false;
             MyBody.ImpartForce = false;
             MyBody.Kinematic = false;
-            
+
             MyBody.addRectCollider();
 
             addTag("enemy");
