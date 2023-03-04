@@ -14,6 +14,7 @@ namespace SmallDemo
         bool left, right, jumpUp, canJump, shoot;
         private double speed = 100, jumpSpeed = 260, jumpCount;
         private int deadZone = 9000, health = 100;
+        private double shootCount, specialCount;
 
         //Track pressed buttons
         bool special1, special2;
@@ -189,7 +190,8 @@ namespace SmallDemo
                 }
             }
 
-            if (shoot)
+            shootCount += Bootstrap.getDeltaTime();
+            if (shoot && shootCount > 0.6f)
             {
                 Bullet b = new Bullet();
                 if (direction == "right")
@@ -205,9 +207,11 @@ namespace SmallDemo
 
                 mountain.repeatAnimtaion(direction + "attack1", 1);
                 shoot = false;
+                shootCount = 0;
             }
 
-            if(special1 && special2)
+            specialCount += Bootstrap.getDeltaTime();
+            if (special1 && special2 && specialCount > 1.0f)
             {
                 Bullet b1 = new Bullet();
                 float x1 = this.Transform.Centre.X + this.Transform.Wid / 2 + b1.Transform.Wid;
@@ -220,6 +224,7 @@ namespace SmallDemo
                 mountain.repeatAnimtaion(direction + "attack3", 1);
                 special1 = false;
                 special2 = false;
+                specialCount = 0;
             }
 
             //Animation update
