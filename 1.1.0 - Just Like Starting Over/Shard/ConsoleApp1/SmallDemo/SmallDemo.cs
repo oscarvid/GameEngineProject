@@ -56,10 +56,14 @@ namespace Shard
 
         public void createEnemy()
         {
-            GameObject enemy2 = new enemy2();
-            GameObject enemy1 = new enemy1();
-            Enemy1_1 enemy1_1 = new Enemy1_1();
+            EnemyFactory.Instance.createEnemy("enemy1", 400f, 250f);
+            EnemyFactory.Instance.createEnemy("enemy2", 450f, 250f);
+            //GameObject enemy2 = new enemy2();
+            //GameObject enemy1 = new enemy1();
+            //Enemy1_1 enemy1_1 = new Enemy1_1();
         }
+
+
         
         public void createWin()
         {

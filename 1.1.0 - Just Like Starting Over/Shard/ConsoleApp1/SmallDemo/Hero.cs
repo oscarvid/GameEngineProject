@@ -194,7 +194,7 @@ namespace SmallDemo
                 Bullet b = new Bullet();
                 if (direction == "right")
                 {
-                    float x = this.Transform.Centre.X + this.Transform.Wid / 2 + b.Transform.Wid;
+                    float x = this.Transform.Centre.X + this.Transform.Wid / 2 + b.Transform.Wid + 10;
                     b.shoot(x, this.Transform.Centre.Y, direction, "heroBullet");
                 }
                 else
