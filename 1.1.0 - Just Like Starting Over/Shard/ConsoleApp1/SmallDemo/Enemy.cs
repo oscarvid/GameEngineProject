@@ -30,6 +30,24 @@ namespace SmallDemo
 
         public override void update()
         {
+
+            if (Transform.X >= 1200)
+            {
+                right = false;
+                left = true;
+                direction = "left";
+                enemyAnimations.updateCurrentAnimation(direction);
+            }
+            else if (Transform.X <= 800)
+            {
+                right = true;
+                left = false;
+                direction = "right";
+                enemyAnimations.updateCurrentAnimation(direction);
+            }
+            
+            Transform.translate((left ? -1 : 1) * speed * Bootstrap.getDeltaTime(), 0);
+
             enemyAnimations.update();
 
             Transform.SpritePath = Bootstrap.getAssetManager().getAssetPath(enemyAnimations.getCurrentSprite());
