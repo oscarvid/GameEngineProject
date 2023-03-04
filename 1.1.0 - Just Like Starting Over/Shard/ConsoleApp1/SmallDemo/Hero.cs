@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Text;
 using System.Threading.Tasks;
 using System;
+using System.Collections.Generic;
 
 namespace SmallDemo
 {
@@ -16,6 +17,9 @@ namespace SmallDemo
 
         //Track pressed buttons
         bool special1, special2;
+        
+        //Win state
+        private bool isWin;
 
         //Animation variables
         private string direction;
@@ -238,6 +242,12 @@ namespace SmallDemo
                 health -= 10;
                 Console.WriteLine("Current health: " + health);
             }
+            
+            if (x.Parent.checkTag("winFlag"))
+            {
+                isWin = true;
+                Console.WriteLine("win");
+            }
 
             MyBody.DebugColor = Color.Green;
         }
@@ -265,6 +275,12 @@ namespace SmallDemo
                 canJump = true;
                 MyBody.UsesGravity = false;
             }
+        }
+
+        public bool IsWin
+        {
+            get => isWin;
+            set => isWin = value;
         }
     }
 }
