@@ -12,11 +12,13 @@ namespace SmallDemo
         public override void initialize()
         {
             base.initialize();
+            
             enemyAnimations.addAnimation("right", () => new Animation("enemy1-right-", 9, 1.2));
             enemyAnimations.addAnimation("left", () => new Animation("enemy1-left-", 10, 1.2));
             enemyAnimations.addAnimation("rightattack", () => new Animation("enemy1-attack-right-", 10, 1.2));
             enemyAnimations.addAnimation("leftattack", () => new Animation("enemy1-attack-left-", 10, 1.2));
             enemyAnimations.updateCurrentAnimation(direction);
+            health = 20;
 
             speed = 100;
         }

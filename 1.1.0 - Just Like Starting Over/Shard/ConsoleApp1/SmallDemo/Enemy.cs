@@ -60,6 +60,12 @@ namespace SmallDemo
             if (x.Parent.checkTag("heroBullet"))
             {
                 health -= 10;
+                Console.WriteLine("health:"+ health);
+            }
+
+            if (health == 0)
+            {
+                ToBeDestroyed = true;
             }
         }
 

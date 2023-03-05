@@ -33,7 +33,7 @@ namespace SmallDemo
             else
             {
                 this.ToBeDestroyed = true;
-                Console.WriteLine("Bullet Destroyed");
+                //Console.WriteLine("Bullet Destroyed");
             }
 
             Bootstrap.getDisplay().addToDraw(this);
@@ -70,13 +70,13 @@ namespace SmallDemo
             if (x.Parent.checkTag("hero") && this.checkTag("enemyBullet"))
             {
                 this.ToBeDestroyed = true;
-                Console.WriteLine("Bullet Destroyed");
+                //Console.WriteLine("Bullet Destroyed");
             }
 
             if (x.Parent.checkTag("enemy") && this.checkTag("heroBullet"))
             {
                 this.ToBeDestroyed = true;
-                Console.WriteLine("Bullet Destroyed");
+                //Console.WriteLine("Bullet Destroyed");
             }
         }
 

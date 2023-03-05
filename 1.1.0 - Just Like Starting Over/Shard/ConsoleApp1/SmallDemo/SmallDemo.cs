@@ -22,6 +22,11 @@ namespace Shard
         {
             return hero.IsWin;
         }
+        
+        public bool isLose()
+        {
+            return hero.IsLose;
+        }
 
         public override void update()
         {
@@ -30,6 +35,12 @@ namespace Shard
             {
                 Color col = Color.FromArgb(random.Next(0, 256), random.Next(0, 256), random.Next(0, 256));
                 Bootstrap.getDisplay().showText("YOU WIN!", 150, 168, 64, col);
+            }
+            
+            if (isLose())
+            {
+                Color col = Color.FromArgb(random.Next(0, 256), random.Next(0, 256), random.Next(0, 256));
+                Bootstrap.getDisplay().showText("GAME OVER", 140, 168, 64, col);
             }
         }
 
@@ -72,6 +83,8 @@ namespace Shard
         
         public override void initialize()
         {
+            SoundSystem.mainSoundSystem.addSoundCategory("backgroundMusic", new SoundCategory(1));
+            SoundSystem.mainSoundSystem.addSoundCategory("attackSound", new SoundCategory(2));
             random = new Random();
             createbackground();
             createGround();

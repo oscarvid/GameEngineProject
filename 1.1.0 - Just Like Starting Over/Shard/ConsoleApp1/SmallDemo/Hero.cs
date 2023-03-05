@@ -13,14 +13,14 @@ namespace SmallDemo
         //Movement variables
         bool left, right, jumpUp, canJump, shoot;
         private double speed = 100, jumpSpeed = 260, jumpCount;
-        private int deadZone = 9000, health = 100;
+        private int deadZone = 9000, health = 50;
         private double shootCount, specialCount;
 
         //Track pressed buttons
         bool special1, special2;
         
         //Win state
-        private bool isWin;
+        private bool isWin, isLose;
 
         //Animation variables
         private string direction;
@@ -54,6 +54,9 @@ namespace SmallDemo
             MyBody.Kinematic = false;
             MyBody.StopOnCollision = true;
             MyBody.DebugColor = Color.Green;
+
+            isWin = false;
+            isLose = false;
             
             addTag("hero");
 
@@ -121,7 +124,7 @@ namespace SmallDemo
                 //Attack 1 (Shoot)
                 else if (inp.Button == (int)SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_X || inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_J)
                 {
-                    Bootstrap.getSound().playSound ("mountain-audio-1.wav");
+                    SoundSystem.mainSoundSystem.playSound("attackSound", "mountain-audio-1.wav");
                     shoot = true;
                 }
 
@@ -129,14 +132,14 @@ namespace SmallDemo
                 //Check if special 1 is pressed
                 if (inp.Button == (int)SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_Y || inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_K)
                 {
-                    Bootstrap.getSound().playSound ("mountain-audio-2.wav");
+                    SoundSystem.mainSoundSystem.playSound("attackSound", "mountain-audio-2.wav");
                     special1 = true;
                 }
 
                 //Check if special 2 is pressed
                 if (inp.Button == (int)SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_B || inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_L)
                 {
-                    Bootstrap.getSound().playSound ("mountain-audio-3.wav");
+                    SoundSystem.mainSoundSystem.playSound("attackSound", "mountain-audio-3.wav");
                     special2 = true;
                 }
             }
@@ -249,7 +252,23 @@ namespace SmallDemo
             {
                 health -= 10;
                 Console.WriteLine("Current health: " + health);
+                if (health <= 0)
+                {
+                    ToBeDestroyed = true;
+                    isLose = true;
+                }
             }
+            
+            if (x.Parent.checkTag("enemy"))
+            {
+                health -= 10;
+                Console.WriteLine("Current health: " + health);
+                if (health <= 0)
+                {
+                    isLose = true;
+                }
+            }
+            
             
             if (x.Parent.checkTag("winFlag"))
             {
@@ -289,6 +308,12 @@ namespace SmallDemo
         {
             get => isWin;
             set => isWin = value;
+        }
+        
+        public bool IsLose
+        {
+            get => isLose;
+            set => isLose = value;
         }
     }
 }

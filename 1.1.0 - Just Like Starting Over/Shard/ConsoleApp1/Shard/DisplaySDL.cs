@@ -112,7 +112,7 @@ namespace Shard
 
             img = SDL_image.IMG_Load(path);
 
-            Debug.getInstance().log("IMG_Load: " + SDL_image.IMG_GetError());
+            //Debug.getInstance().log("IMG_Load: " + SDL_image.IMG_GetError());
 
             spriteBuffer[path] = SDL.SDL_CreateTextureFromSurface(_rend, img);
 

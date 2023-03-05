@@ -16,6 +16,7 @@ namespace SmallDemo
             enemyAnimations.addAnimation("left", () => new Animation("enemy2-attack-left-", 19, 1.9));
             enemyAnimations.updateCurrentAnimation(direction);
 
+            health = 50;
             speed = 100;
         }
     }
