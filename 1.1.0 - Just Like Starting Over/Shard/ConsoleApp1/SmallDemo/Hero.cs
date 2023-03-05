@@ -121,6 +121,7 @@ namespace SmallDemo
                 //Attack 1 (Shoot)
                 else if (inp.Button == (int)SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_X || inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_J)
                 {
+                    Bootstrap.getSound().playSound ("mountain-audio-1.wav");
                     shoot = true;
                 }
 
@@ -128,12 +129,14 @@ namespace SmallDemo
                 //Check if special 1 is pressed
                 if (inp.Button == (int)SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_Y || inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_K)
                 {
+                    Bootstrap.getSound().playSound ("mountain-audio-2.wav");
                     special1 = true;
                 }
 
                 //Check if special 2 is pressed
                 if (inp.Button == (int)SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_B || inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_L)
                 {
+                    Bootstrap.getSound().playSound ("mountain-audio-3.wav");
                     special2 = true;
                 }
             }

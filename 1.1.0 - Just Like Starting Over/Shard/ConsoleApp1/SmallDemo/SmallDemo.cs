@@ -78,6 +78,7 @@ namespace Shard
             createWin();
             createHero();
             createEnemy();
+            Bootstrap.getSound().playSound ("prisonbreak.wav");
         }
     }
 }

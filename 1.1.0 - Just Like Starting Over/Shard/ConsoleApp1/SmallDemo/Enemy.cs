@@ -31,7 +31,7 @@ namespace SmallDemo
         public override void update()
         {
 
-            if (Transform.X >= 1200)
+            if (Transform.X >= 1200) //this number should be get from the enemy1 or enemy2 class so that each enemy will have their own active range
             {
                 right = false;
                 left = true;

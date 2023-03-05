@@ -28,6 +28,7 @@ namespace Shard
             SDL.SDL_PauseAudioDevice(dev, 0);
 
         }
+        
 
     }
 }
