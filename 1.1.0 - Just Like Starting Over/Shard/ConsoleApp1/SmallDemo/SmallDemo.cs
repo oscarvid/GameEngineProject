@@ -34,16 +34,22 @@ namespace Shard
             if (isWin())
             {
                 Color col = Color.FromArgb(random.Next(0, 256), random.Next(0, 256), random.Next(0, 256));
+                createBlack();
                 Bootstrap.getDisplay().showText("YOU WIN!", 150, 168, 64, col);
             }
             
             if (isLose())
             {
                 Color col = Color.FromArgb(random.Next(0, 256), random.Next(0, 256), random.Next(0, 256));
+                createBlack();
                 Bootstrap.getDisplay().showText("GAME OVER", 140, 168, 64, col);
             }
         }
 
+        private void createBlack()
+        {
+            GameObject black = new Black();
+        }
         private void createGround()
         {
             GameObject ground = new Ground();
@@ -69,6 +75,7 @@ namespace Shard
         {
             EnemyFactory.Instance.createEnemy("enemy1", 1000f, 250f);
             EnemyFactory.Instance.createEnemy("enemy2", 1100f, 250f);
+            EnemyFactory.Instance.createEnemy("enemy3", 1100f, 250f);
             //GameObject enemy2 = new enemy2();
             //GameObject enemy1 = new enemy1();
             //Enemy1_1 enemy1_1 = new Enemy1_1();

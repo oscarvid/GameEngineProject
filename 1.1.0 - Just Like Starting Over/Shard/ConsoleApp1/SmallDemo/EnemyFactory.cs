@@ -40,6 +40,13 @@ namespace SmallDemo
                 e.Transform.X = xPos;
                 e.Transform.Y = yPos;
             }
+            
+            else if (enemyType == "enemy3")
+            {
+                Enemy e = new Enemy3();
+                e.Transform.X = xPos;
+                e.Transform.Y = yPos;
+            }
 
             else
             {

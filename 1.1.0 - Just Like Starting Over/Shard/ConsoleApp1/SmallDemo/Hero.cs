@@ -13,7 +13,7 @@ namespace SmallDemo
         //Movement variables
         bool left, right, jumpUp, canJump, shoot;
         private double speed = 100, jumpSpeed = 260, jumpCount;
-        private int deadZone = 9000, health = 50;
+        private int deadZone = 9000, health = 1540;
         private double shootCount, specialCount;
 
         //Track pressed buttons

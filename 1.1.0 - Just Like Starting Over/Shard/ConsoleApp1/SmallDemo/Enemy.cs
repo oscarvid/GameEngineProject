@@ -10,8 +10,9 @@ namespace SmallDemo
     abstract class Enemy: GameObject, CollisionHandler
     {
         protected bool left, right;
-        protected int health, speed;
+        protected int health, speed, defence;
         protected string direction;
+        protected int leftmax = 800, rightmax = 1200;
         protected AnimationCollection enemyAnimations = new AnimationCollection();
 
         public override void initialize()
@@ -31,14 +32,14 @@ namespace SmallDemo
         public override void update()
         {
 
-            if (Transform.X >= 1200) //this number should be get from the enemy1 or enemy2 class so that each enemy will have their own active range
+            if (Transform.X >= rightmax) //this number should be get from the enemy1 or enemy2 class so that each enemy will have their own active range
             {
                 right = false;
                 left = true;
                 direction = "left";
                 enemyAnimations.updateCurrentAnimation(direction);
             }
-            else if (Transform.X <= 800)
+            else if (Transform.X <= leftmax)
             {
                 right = true;
                 left = false;
@@ -59,12 +60,13 @@ namespace SmallDemo
         {
             if (x.Parent.checkTag("heroBullet"))
             {
-                health -= 10;
+                health -= (1540 - defence);
                 Console.WriteLine("health:"+ health);
             }
 
-            if (health == 0)
+            if (health <= 0)
             {
+                enemyAnimations.repeatAnimtaion(direction + "die", 1);
                 ToBeDestroyed = true;
             }
         }

@@ -17,10 +17,15 @@ namespace SmallDemo
             enemyAnimations.addAnimation("left", () => new Animation("enemy1-left-", 10, 1.2));
             enemyAnimations.addAnimation("rightattack", () => new Animation("enemy1-attack-right-", 10, 1.2));
             enemyAnimations.addAnimation("leftattack", () => new Animation("enemy1-attack-left-", 10, 1.2));
+            enemyAnimations.addAnimation("rightdie", () => new Animation("enemy1-right-", 9, 1.2));
+            enemyAnimations.addAnimation("leftdie", () => new Animation("enemy1-left-", 10, 1.2));
             enemyAnimations.updateCurrentAnimation(direction);
+            
             health = 20;
-
+            defence = 0;
             speed = 100;
+            rightmax = 1000;
+            leftmax = 600;
         }
     }
 }
