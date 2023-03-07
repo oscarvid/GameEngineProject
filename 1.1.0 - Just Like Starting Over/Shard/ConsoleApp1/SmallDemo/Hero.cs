@@ -222,13 +222,14 @@ namespace SmallDemo
                 SoundSystem.mainSoundSystem.playSound("attackSound", "fia-attack-" + ran.Next(4) + ".wav");
                 if (direction == "right")
                 {
-                    float x = this.Transform.Centre.X + this.Transform.Wid / 2 + b.Transform.Wid + 10;
+                    float x = this.Transform.Centre.X + (this.Transform.Wid / 2);
                     b.shoot(x, this.Transform.Centre.Y, direction, "heroBullet");
                 }
                 else
                 {
-                    float x = this.Transform.X - b.Transform.Wid - 10;
+                    float x = this.Transform.X - 8;
                     b.shoot(x, this.Transform.Centre.Y, direction, "heroBullet");
+                    Console.WriteLine("b wid: " + b.Transform.Wid);
                 }
 
                 fia.repeatAnimtaion(direction + "attack1", 1);
@@ -239,25 +240,18 @@ namespace SmallDemo
             specialCount += Bootstrap.getDeltaTime();
             if (special1 && special2 && specialCount > 1.0f)
             {
-                // Bullet b1 = new Bullet();
-                // float x1 = this.Transform.Centre.X + this.Transform.Wid / 2 + b1.Transform.Wid;
-                // b1.shoot(x1, this.Transform.Centre.Y, "right", "heroBullet");
-                
-                // Bullet b2 = new Bullet();
-                // float x2 = this.Transform.X - b2.Transform.Wid - 10;
-                // b2.shoot(x2, this.Transform.Centre.Y, "left", "heroBullet");
-                RedBullet b1 = new RedBullet();
+                RedBullet b = new RedBullet();
                 if (direction == "right")
                 {
                     Console.WriteLine("attack right!");
-                    float x1 = this.Transform.Centre.X + this.Transform.Wid / 2 + b1.Transform.Wid;
-                    b1.shoot(x1, this.Transform.Centre.Y, direction, "redBullet");
+                    float x = this.Transform.Centre.X + (this.Transform.Wid / 2);
+                    b.shoot(x, this.Transform.Centre.Y, direction, "redBullet");
                 }
                 else
                 {
                     Console.WriteLine("attack left!");
-                    float x1 = this.Transform.X - b1.Transform.Wid - 10;
-                    b1.shoot(x1, this.Transform.Centre.Y, direction, "redBullet");
+                    float x = this.Transform.X - 51;
+                    b.shoot(x, this.Transform.Centre.Y, direction, "redBullet");
                 }
 
 
