@@ -12,7 +12,7 @@ namespace SmallDemo
     {
         //Movement variables
         bool left, right, jumpUp, canJump, shoot;
-        private double speed = 100, jumpSpeed = 260, jumpCount;
+        private double speed = 100, jumpSpeed = 260, jumpCount, invisCount;
         private int deadZone = 9000, health = 1800;
         private double shootCount, specialCount;
 
@@ -55,7 +55,8 @@ namespace SmallDemo
 
             isWin = false;
             isLose = false;
-            
+
+            MyBody.DebugColor = Color.Green;
             addTag("hero");
 
         }
@@ -179,6 +180,14 @@ namespace SmallDemo
 
         public override void update()
         {
+            invisCount += Bootstrap.getDeltaTime();
+
+            if (health <= 0)
+            {
+                ToBeDestroyed = true;
+                isLose = true;
+            }
+
             //Inputs update
             if (right)
             {
@@ -266,23 +275,22 @@ namespace SmallDemo
 
             if (x.Parent.checkTag("enemyBullet"))
             {
-                health -= 10;
-                Console.WriteLine("Current health: " + health);
-                if (health <= 0)
+                if (invisCount >= 0.3)
                 {
-                    ToBeDestroyed = true;
-                    isLose = true;
+                    health -= 10;
+                    Console.WriteLine("Current health: " + health);
+                    invisCount = 0;
                 }
             }
             
             if (x.Parent.checkTag("enemy"))
             {
-                health -= 10;
-                Console.WriteLine("Current health: " + health);
-                if (health <= 0)
+                if(invisCount >= 0.3)
                 {
-                    isLose = true;
-                }
+                    health -= 10;
+                    Console.WriteLine("Current health: " + health);
+                    invisCount = 0;
+                }     
             }
             
             
@@ -291,28 +299,40 @@ namespace SmallDemo
                 isWin = true;
                 Console.WriteLine("win");
             }
-
-            MyBody.DebugColor = Color.Green;
         }
         
         public void onCollisionExit(PhysicsBody x)
         {
-            if(x != null)
-            {
-                if (x.Parent.checkTag("ground"))
-                {
-                    MyBody.UsesGravity = true;
-                }
-            }
-            
 
-            MyBody.DebugColor = Color.Red;
-            
+            if (x == null)
+            {
+                return;
+            }
+
+            if (x.Parent.checkTag("ground"))
+            {
+                MyBody.UsesGravity = true;
+            }          
         }
 
         public void onCollisionStay(PhysicsBody x)
         {
-            MyBody.DebugColor = Color.Blue;
+
+            if (x == null)
+            {
+                return;
+            }
+
+                if (x.Parent.checkTag("enemy"))
+            {
+                if (invisCount >= 0.3)
+                {
+                    health -= 10;
+                    Console.WriteLine("Current health: " + health);
+                    invisCount = 0;
+                }
+            }
+
             if (x.Parent.checkTag("ground"))
             {
                 canJump = true;
