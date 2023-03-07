@@ -43,9 +43,12 @@ namespace SmallDemo
             {
                 for (int i = Math.Max(lastHealth + 1, 0); i <= nowHealth; i++)
                 {
+                    Console.WriteLine("add health!");
                     showHealth[i].Transform.SpritePath = Bootstrap.getAssetManager().getAssetPath("health.png");
                 }
             }
+
+            lastHealth = nowHealth;
             //follow the camera
             Transform.X = Camera.mainCamera.Transform.X;
             Transform.Y = Camera.mainCamera.Transform.Y;

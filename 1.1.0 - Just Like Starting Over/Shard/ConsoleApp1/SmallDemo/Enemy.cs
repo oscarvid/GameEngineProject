@@ -9,7 +9,7 @@ namespace SmallDemo
 {
     abstract class Enemy: GameObject, CollisionHandler
     {
-        protected bool left, right, isDead, attcking;
+        protected bool left, right, isDead, attacking;
         protected int health, speed, defence;
         protected string direction;
         protected int leftmax = 800, rightmax = 1200;
@@ -33,7 +33,7 @@ namespace SmallDemo
 
         public override void update()
         {
-            if (!isDead && !attcking)
+            if (!isDead && !attacking)
             {
                 if (Transform.X >=
                     rightmax) //this number should be get from the enemy1 or enemy2 class so that each enemy will have their own active range
@@ -82,14 +82,14 @@ namespace SmallDemo
             
             if (x.Parent.checkTag("redBullet"))
             {
-                health -= (861 - defence) * 3;
+                health -= (861 - defence) * 4;
                 Console.WriteLine("health:"+ health);
             }
 
-            if (x.Parent.checkTag("hero"))
+            if (x.Parent.checkTag("hero") && !attacking)
             {
                 Console.WriteLine("ENMEY ATTACK!");
-                attcking = true;
+                attacking = true;
                 enemyAnimations.repeatAnimtaion(direction + "attack", 1);
             }
 
@@ -109,16 +109,16 @@ namespace SmallDemo
 
             if (x.Parent.checkTag("hero"))
             {
-                attcking = false;
+                attacking = false;
             }
         }
         public void onCollisionStay(PhysicsBody x)
         {
-            if (x.Parent.checkTag("hero"))
+            if (x.Parent.checkTag("hero") && !attacking)
             {
-                Console.WriteLine("ENMEY ATTACK!");
-                attcking = true;
-                enemyAnimations.repeatAnimtaion(direction + "attack", 1);
+                Console.WriteLine("ENEMY ATTACK!");
+                attacking = true;
+                enemyAnimations.repeatAnimtaion(direction + "attack", 1);//把attacking关了
             }
         }
     }
