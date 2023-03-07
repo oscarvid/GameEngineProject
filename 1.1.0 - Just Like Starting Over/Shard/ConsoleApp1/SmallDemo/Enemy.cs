@@ -73,9 +73,16 @@ namespace SmallDemo
             {
                 return;
             }
+            
             if (x.Parent.checkTag("heroBullet"))
             {
                 health -= (861 - defence);
+                Console.WriteLine("health:"+ health);
+            }
+            
+            if (x.Parent.checkTag("redBullet"))
+            {
+                health -= (861 - defence) * 3;
                 Console.WriteLine("health:"+ health);
             }
 

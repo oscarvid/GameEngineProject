@@ -239,13 +239,27 @@ namespace SmallDemo
             specialCount += Bootstrap.getDeltaTime();
             if (special1 && special2 && specialCount > 1.0f)
             {
-                Bullet b1 = new Bullet();
-                float x1 = this.Transform.Centre.X + this.Transform.Wid / 2 + b1.Transform.Wid;
-                b1.shoot(x1, this.Transform.Centre.Y, "right", "heroBullet");
+                // Bullet b1 = new Bullet();
+                // float x1 = this.Transform.Centre.X + this.Transform.Wid / 2 + b1.Transform.Wid;
+                // b1.shoot(x1, this.Transform.Centre.Y, "right", "heroBullet");
+                
+                // Bullet b2 = new Bullet();
+                // float x2 = this.Transform.X - b2.Transform.Wid - 10;
+                // b2.shoot(x2, this.Transform.Centre.Y, "left", "heroBullet");
+                RedBullet b1 = new RedBullet();
+                if (direction == "right")
+                {
+                    Console.WriteLine("attack right!");
+                    float x1 = this.Transform.Centre.X + this.Transform.Wid / 2 + b1.Transform.Wid;
+                    b1.shoot(x1, this.Transform.Centre.Y, direction, "redBullet");
+                }
+                else
+                {
+                    Console.WriteLine("attack left!");
+                    float x1 = this.Transform.X - b1.Transform.Wid - 10;
+                    b1.shoot(x1, this.Transform.Centre.Y, direction, "redBullet");
+                }
 
-                Bullet b2 = new Bullet();
-                float x2 = this.Transform.X - b2.Transform.Wid - 10;
-                b2.shoot(x2, this.Transform.Centre.Y, "left", "heroBullet");
 
                 fia.repeatAnimtaion(direction + "attack2", 1);
                 special1 = false;
@@ -255,6 +269,7 @@ namespace SmallDemo
 
             //Animation update
             fia.update();
+            
             Transform.SpritePath = Bootstrap.getAssetManager().getAssetPath(fia.getCurrentSprite());
 
             //Draw to screen.
@@ -268,9 +283,14 @@ namespace SmallDemo
                 canJump = true;
             }
             
-            if (x.Parent.checkTag("food"))
+            if (x.Parent.checkTag("soup"))
             {
-                health += 10;
+                health = Math.Min(health + 100, 1800);
+            }
+            
+            if (x.Parent.checkTag("sashimi"))
+            {
+                health = Math.Min(health + 50, 1800);
             }
 
             if (x.Parent.checkTag("enemyBullet"))

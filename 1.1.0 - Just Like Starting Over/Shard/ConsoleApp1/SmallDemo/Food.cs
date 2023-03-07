@@ -1,3 +1,4 @@
+using System;
 using Shard;
 
 namespace SmallDemo
@@ -5,9 +6,11 @@ namespace SmallDemo
     class Food: GameObject, CollisionHandler
     {
         private int recoverHealth;
-        
-        public Food(float x, float y, string fileName, int recoverHealth_)
+        private Action<int> addHealth;
+
+        public Food(float x, float y, string fileName, int recoverHealth_, string foodTag)
         {
+            addTag(foodTag);
             recoverHealth = recoverHealth_;
             Transform.X = x;
             Transform.Y = y;
@@ -20,8 +23,6 @@ namespace SmallDemo
             MyBody.Mass = 10;
             MyBody.UsesGravity = true;
             MyBody.addRectCollider();
-
-            addTag("food");
         }
         
         public override void update()

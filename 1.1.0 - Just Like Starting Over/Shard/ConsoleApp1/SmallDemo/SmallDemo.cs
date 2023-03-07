@@ -80,7 +80,8 @@ namespace Shard
         
         public void createFood()
         {
-            GameObject food1 = new Food(100, 250, "Fresh_cut_crab_sashimi.png", 10);
+            GameObject food1 = new Food(800, 280, "Fresh_cut_crab_sashimi.png", 10, "sashimi");
+            GameObject food2 = new Food(1500, 250, "High_pressure_re-bake_soup.png", 10, "soup");
         }
         
         public void createWinFlag()
