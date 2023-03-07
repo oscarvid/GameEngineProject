@@ -7,7 +7,7 @@ using System;
 
 namespace SmallDemo
 {
-    class WinFlag: GameObject, InputListener, CollisionHandler
+    class WinFlag: GameObject, CollisionHandler
     {
         private string direction;
         //private double speed = 100, jumpSpeed = 260;
@@ -19,34 +19,16 @@ namespace SmallDemo
             win.addAnimation("winFlag", () => new Animation("win-", 1, 1));
             win.updateCurrentAnimation("winFlag");
 
-
-            Bootstrap.getInput().addListener(this);
-
             setPhysicsEnabled();
-            
-            MyBody.Mass = 2;
-            MyBody.MaxForce = 10;
-            MyBody.AngularDrag = 0.01f;
-            MyBody.Drag = 0f;
-            MyBody.StopOnCollision = false;
-            MyBody.ReflectOnCollision = false;
-            MyBody.ImpartForce = false;
-            MyBody.Kinematic = false;
-            
+
+            MyBody.Mass = 10;
+            MyBody.StopOnCollision = true;
+            MyBody.Kinematic = true;
+
             MyBody.addRectCollider();
 
             addTag("winFlag");
 
-        }
-
-        public void handleInput(InputEvent inp, string eventType)
-        {
-            
-        }
-
-        public override void physicsUpdate()
-        {
-            
         }
 
         public override void update()
