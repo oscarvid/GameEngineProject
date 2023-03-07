@@ -22,13 +22,6 @@ namespace Shard
             spriteTimer = 0;
         }
 
-        // public string startAnimation()
-        // {
-        //     start = DateTime.Now.ToFileTime();
-        //     current = 0;
-        //     return sprite + "0.png";
-        // }
-        
         public void update()
         {
             spriteTimer += Bootstrap.getDeltaTime();
@@ -66,6 +59,7 @@ namespace Shard
                 current++;
                 current = current % sum;
             }
+            
             return sprite + current + ".png";
         }
     }

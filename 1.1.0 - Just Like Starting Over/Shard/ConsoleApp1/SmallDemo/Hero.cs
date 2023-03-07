@@ -13,7 +13,7 @@ namespace SmallDemo
         //Movement variables
         bool left, right, jumpUp, canJump, shoot;
         private double speed = 100, jumpSpeed = 260, jumpCount;
-        private int deadZone = 9000, health = 1540;
+        private int deadZone = 9000, health = 1800;
         private double shootCount, specialCount;
 
         //Track pressed buttons
@@ -24,7 +24,7 @@ namespace SmallDemo
 
         //Animation variables
         private string direction;
-        private AnimationCollection mountain = new AnimationCollection();
+        private AnimationCollection fia = new AnimationCollection();
         public override void initialize()
         {
             //Initial movement and position values
@@ -33,15 +33,13 @@ namespace SmallDemo
 
             //Initial animation setup
             direction = "right";
-            mountain.addAnimation("right", () => new Animation("mountain-", 6, 0.6));
-            mountain.addAnimation("left", () => new Animation("mountain-left-", 6, 0.6));
-            mountain.addAnimation("rightattack1", () => new Animation("mountain-attack-", 6, 0.6));
-            mountain.addAnimation("leftattack1", () => new Animation("mountain-left-attack-", 6, 0.6));
-            mountain.addAnimation("rightattack2", () => new Animation("mountain-attack2-", 8, 0.8));
-            mountain.addAnimation("leftattack2", () => new Animation("mountain-left-attack2-", 8, 0.8));
-            mountain.addAnimation("rightattack3", () => new Animation("mountain-attack3-", 10, 1));
-            mountain.addAnimation("leftattack3", () => new Animation("mountain-left-attack3-", 10, 1));
-            mountain.updateCurrentAnimation(direction);
+            fia.addAnimation("right", () => new Animation("fia-right-", 12, 1));
+            fia.addAnimation("left", () => new Animation("fia-left-", 12, 1));
+            fia.addAnimation("rightattack1", () => new Animation("fia-attack1-right-", 15, 1.2));
+            fia.addAnimation("leftattack1", () => new Animation("fia-attack1-left-", 15, 1.2));
+            fia.addAnimation("rightattack2", () => new Animation("fia-attack2-right-", 15, 1.2));
+            fia.addAnimation("leftattack2", () => new Animation("fia-attack2-left-", 15, 1.2));
+            fia.updateCurrentAnimation(direction);
 
             //Add input listener
             Bootstrap.getInput().addListener(this);
@@ -72,18 +70,24 @@ namespace SmallDemo
                 {
                     if (inp.AxisValue > deadZone)
                     {
-                        right = true;
-                        left = false;
-                        direction = "right";
-                        mountain.updateCurrentAnimation(direction);
+                        if (!right)
+                        {
+                            right = true;
+                            left = false;
+                            direction = "right";
+                            fia.updateCurrentAnimation(direction);
+                        }
                     }
 
                     else if (inp.AxisValue < -deadZone)
                     {
-                        right = false;
-                        left = true;
-                        direction = "left";
-                        mountain.updateCurrentAnimation(direction);
+                        if (!left)
+                        {
+                            right = false;
+                            left = true;
+                            direction = "left";
+                            fia.updateCurrentAnimation(direction);
+                        }
                     }
 
                     else
@@ -101,17 +105,25 @@ namespace SmallDemo
                 //Walk right
                 if (inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_D)
                 {
-                    right = true;
-                    direction = "right";
-                    mountain.updateCurrentAnimation(direction);
+                    if (!right)
+                    {
+                        right = true;
+                        left = false;
+                        direction = "right";
+                        fia.updateCurrentAnimation(direction);
+                    }
                 }
 
                 //Walk left
                 else if (inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_A)
                 {
-                    left = true;
-                    direction = "left";
-                    mountain.updateCurrentAnimation(direction);
+                    if (!left)
+                    {
+                        left = true;
+                        right = false;
+                        direction = "left";
+                        fia.updateCurrentAnimation(direction);
+                    }
                 }
 
                 //Jumping
@@ -124,7 +136,6 @@ namespace SmallDemo
                 //Attack 1 (Shoot)
                 else if (inp.Button == (int)SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_X || inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_J)
                 {
-                    SoundSystem.mainSoundSystem.playSound("attackSound", "mountain-audio-1.wav");
                     shoot = true;
                 }
 
@@ -132,14 +143,12 @@ namespace SmallDemo
                 //Check if special 1 is pressed
                 if (inp.Button == (int)SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_Y || inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_K)
                 {
-                    SoundSystem.mainSoundSystem.playSound("attackSound", "mountain-audio-2.wav");
                     special1 = true;
                 }
 
                 //Check if special 2 is pressed
                 if (inp.Button == (int)SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_B || inp.Key == (int)SDL.SDL_Scancode.SDL_SCANCODE_L)
                 {
-                    SoundSystem.mainSoundSystem.playSound("attackSound", "mountain-audio-3.wav");
                     special2 = true;
                 }
             }
@@ -200,6 +209,8 @@ namespace SmallDemo
             if (shoot && shootCount > 0.6f)
             {
                 Bullet b = new Bullet();
+                Random ran = new Random();
+                SoundSystem.mainSoundSystem.playSound("attackSound", "fia-attack-" + ran.Next(4) + ".wav");
                 if (direction == "right")
                 {
                     float x = this.Transform.Centre.X + this.Transform.Wid / 2 + b.Transform.Wid + 10;
@@ -211,7 +222,7 @@ namespace SmallDemo
                     b.shoot(x, this.Transform.Centre.Y, direction, "heroBullet");
                 }
 
-                mountain.repeatAnimtaion(direction + "attack1", 1);
+                fia.repeatAnimtaion(direction + "attack1", 1);
                 shoot = false;
                 shootCount = 0;
             }
@@ -227,15 +238,15 @@ namespace SmallDemo
                 float x2 = this.Transform.X - b2.Transform.Wid - 10;
                 b2.shoot(x2, this.Transform.Centre.Y, "left", "heroBullet");
 
-                mountain.repeatAnimtaion(direction + "attack3", 1);
+                fia.repeatAnimtaion(direction + "attack2", 1);
                 special1 = false;
                 special2 = false;
                 specialCount = 0;
             }
 
             //Animation update
-            mountain.update();
-            Transform.SpritePath = Bootstrap.getAssetManager().getAssetPath(mountain.getCurrentSprite());
+            fia.update();
+            Transform.SpritePath = Bootstrap.getAssetManager().getAssetPath(fia.getCurrentSprite());
 
             //Draw to screen.
             Bootstrap.getDisplay().addToDraw(this);
@@ -246,6 +257,11 @@ namespace SmallDemo
             if (x.Parent.checkTag("ground"))
             {
                 canJump = true;
+            }
+            
+            if (x.Parent.checkTag("food"))
+            {
+                health += 10;
             }
 
             if (x.Parent.checkTag("enemyBullet"))
@@ -314,6 +330,12 @@ namespace SmallDemo
         {
             get => isLose;
             set => isLose = value;
+        }
+        
+        public int Health
+        {
+            get => health;
+            set => health = value;
         }
     }
 }

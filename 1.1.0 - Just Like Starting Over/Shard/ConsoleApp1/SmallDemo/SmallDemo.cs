@@ -59,35 +59,36 @@ namespace Shard
         {
             hero = new Hero();
             Camera.mainCamera.Bundle = hero;
+            GameObject dashboard = new Dashboard(hero);
         }
 
         public void createbackground()
         {
             GameObject bg = new Background();
         }
-
-        // public void createCamera()
-        // {
-        //     Camera mainCamera = new Camera();
-        // }
+        
 
         public void createEnemy()
         {
-            EnemyFactory.Instance.createEnemy("enemy1", 1000f, 250f);
-            EnemyFactory.Instance.createEnemy("enemy2", 1100f, 250f);
-            EnemyFactory.Instance.createEnemy("enemy3", 1100f, 250f);
+            //EnemyFactory.Instance.createEnemy("enemy1", 1000f, 250f);
+            //EnemyFactory.Instance.createEnemy("enemy2", 1100f, 250f);
+            EnemyFactory.Instance.createEnemy("enemy3", 800f, 250f);
+            EnemyFactory.Instance.createEnemy("enemy4", 1100f, 250f);
             //GameObject enemy2 = new enemy2();
             //GameObject enemy1 = new enemy1();
             //Enemy1_1 enemy1_1 = new Enemy1_1();
         }
-
-
         
-        public void createWin()
+        public void createFood()
+        {
+            GameObject food1 = new Food(100, 250, "Fresh_cut_crab_sashimi.png", 10);
+        }
+        
+        public void createWinFlag()
         {
             GameObject winFlag = new WinFlag();
         }
-        
+
         public override void initialize()
         {
             SoundSystem.mainSoundSystem.addSoundCategory("backgroundMusic", new SoundCategory(1));
@@ -95,10 +96,12 @@ namespace Shard
             random = new Random();
             createbackground();
             createGround();
-            createWin();
+            createWinFlag();
+            createFood();
             createHero();
             createEnemy();
-            Bootstrap.getSound().playSound ("prisonbreak.wav");
+            //createDashboard();
+            Bootstrap.getSound().playSound ("act16side.wav");
         }
     }
 }

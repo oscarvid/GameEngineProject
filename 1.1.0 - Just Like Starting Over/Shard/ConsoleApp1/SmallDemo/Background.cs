@@ -15,7 +15,7 @@ namespace SmallDemo
             this.Transform.Y = 0.0f;
             this.Transform.SpritePath = Bootstrap.getAssetManager().getAssetPath("bg.png"); //2048 * 400
         
-            Bootstrap.getInput().addListener(this);
+            //Bootstrap.getInput().addListener(this);
         }
 
         public override void update()

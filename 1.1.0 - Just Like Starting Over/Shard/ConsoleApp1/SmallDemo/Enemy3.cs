@@ -1,11 +1,26 @@
 using Shard;
+using System;
 
 namespace SmallDemo
 {
     class Enemy3: Enemy
     {
+        public Enemy3()
+        {
+            Random ran = new Random();
+            leftmax = ran.Next(1800);
+            rightmax = leftmax + ran.Next(200) + 50;
+        }
+        
+        public Enemy3(int left, int right)
+        {
+            leftmax = left;
+            rightmax = right;
+        }
+        
         public override void initialize()
         {
+            
             base.initialize();
             
             enemyAnimations.addAnimation("right", () => new Animation("enemy3-right-", 10, 1));

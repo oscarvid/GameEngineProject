@@ -9,7 +9,7 @@ namespace SmallDemo
 {
     abstract class Enemy: GameObject, CollisionHandler
     {
-        protected bool left, right;
+        protected bool left, right, isDead;
         protected int health, speed, defence;
         protected string direction;
         protected int leftmax = 800, rightmax = 1200;
@@ -27,27 +27,37 @@ namespace SmallDemo
             addTag("enemy");
 
             direction = "left";
+            isDead = false;
         }
 
         public override void update()
         {
+            if (!isDead)
+            {
+                if (Transform.X >=
+                    rightmax) //this number should be get from the enemy1 or enemy2 class so that each enemy will have their own active range
+                {
+                    if (!left)
+                    {
+                        right = false;
+                        left = true;
+                        direction = "left";
+                        enemyAnimations.updateCurrentAnimation(direction);
+                    }
+                }
+                else if (Transform.X <= leftmax)
+                {
+                    if (!right)
+                    {
+                        right = true;
+                        left = false;
+                        direction = "right";
+                        enemyAnimations.updateCurrentAnimation(direction);
+                    }
+                }
 
-            if (Transform.X >= rightmax) //this number should be get from the enemy1 or enemy2 class so that each enemy will have their own active range
-            {
-                right = false;
-                left = true;
-                direction = "left";
-                enemyAnimations.updateCurrentAnimation(direction);
+                Transform.translate((left ? -1 : 1) * speed * Bootstrap.getDeltaTime(), 0);
             }
-            else if (Transform.X <= leftmax)
-            {
-                right = true;
-                left = false;
-                direction = "right";
-                enemyAnimations.updateCurrentAnimation(direction);
-            }
-            
-            Transform.translate((left ? -1 : 1) * speed * Bootstrap.getDeltaTime(), 0);
 
             enemyAnimations.update();
 
@@ -58,16 +68,20 @@ namespace SmallDemo
 
         public void onCollisionEnter(PhysicsBody x)
         {
+            if (isDead)
+            {
+                return;
+            }
             if (x.Parent.checkTag("heroBullet"))
             {
-                health -= (1540 - defence);
+                health -= (861 - defence);
                 Console.WriteLine("health:"+ health);
             }
 
             if (health <= 0)
             {
-                enemyAnimations.repeatAnimtaion(direction + "die", 1);
-                ToBeDestroyed = true;
+                enemyAnimations.repeatAnimtaion(direction + "die", 1, _ => ToBeDestroyed = true);
+                isDead = true;
             }
         }
 

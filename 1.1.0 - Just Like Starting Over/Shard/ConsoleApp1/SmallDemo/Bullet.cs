@@ -11,7 +11,7 @@ namespace SmallDemo
     class Bullet : GameObject, CollisionHandler
     {
         private bool left, right;
-        private int speed = 200;
+        private int speed = 180;
         private double bulletLifeTime;
         public override void update()
         {
