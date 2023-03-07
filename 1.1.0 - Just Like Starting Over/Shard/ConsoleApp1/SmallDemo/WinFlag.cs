@@ -10,7 +10,6 @@ namespace SmallDemo
     class WinFlag: GameObject, CollisionHandler
     {
         private string direction;
-        //private double speed = 100, jumpSpeed = 260;
         private AnimationCollection win = new AnimationCollection();
         public override void initialize()
         {

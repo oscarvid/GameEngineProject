@@ -118,7 +118,7 @@ namespace SmallDemo
             {
                 Console.WriteLine("ENEMY ATTACK!");
                 attacking = true;
-                enemyAnimations.repeatAnimtaion(direction + "attack", 1);//把attacking关了
+                enemyAnimations.repeatAnimtaion(direction + "attack", 1);
             }
         }
     }

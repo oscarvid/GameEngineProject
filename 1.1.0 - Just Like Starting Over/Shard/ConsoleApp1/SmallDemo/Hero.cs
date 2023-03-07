@@ -39,6 +39,8 @@ namespace SmallDemo
             fia.addAnimation("leftattack1", () => new Animation("fia-attack1-left-", 15, 1.2));
             fia.addAnimation("rightattack2", () => new Animation("fia-attack2-right-", 15, 1.2));
             fia.addAnimation("leftattack2", () => new Animation("fia-attack2-left-", 15, 1.2));
+            fia.addAnimation("rightdie", () => new Animation("fia-die-right-", 10, 1.2));
+            fia.addAnimation("leftdie", () => new Animation("fia-die-left-", 10, 1.2));
             fia.updateCurrentAnimation(direction);
 
             //Add input listener
@@ -180,85 +182,95 @@ namespace SmallDemo
 
         public override void update()
         {
-            invisCount += Bootstrap.getDeltaTime();
-
-            if (health <= 0)
+            if (!isLose)
             {
-                ToBeDestroyed = true;
-                isLose = true;
-            }
+                invisCount += Bootstrap.getDeltaTime();
 
-            //Inputs update
-            if (right)
-            {
-                Transform.translate(1 * speed * Bootstrap.getDeltaTime(), 0);
-            }
-
-            if (left)
-            {
-                Transform.translate(-1 * speed * Bootstrap.getDeltaTime(), 0);
-            }
-
-            if (jumpUp)
-            {
-                canJump = false;
-                if (jumpCount < 0.3f)
+                if (health <= 0)
                 {
-                    this.Transform.translate(0, -1 * jumpSpeed * Bootstrap.getDeltaTime());
-                    jumpCount += Bootstrap.getDeltaTime();
-                }
-                else
-                {
-                    jumpCount = 0;
-                    jumpUp = false;
-                }
-            }
-
-            shootCount += Bootstrap.getDeltaTime();
-            if (shoot && shootCount > 0.6f)
-            {
-                Bullet b = new Bullet();
-                Random ran = new Random();
-                SoundSystem.mainSoundSystem.playSound("attackSound", "fia-attack-" + ran.Next(4) + ".wav");
-                if (direction == "right")
-                {
-                    float x = this.Transform.Centre.X + (this.Transform.Wid / 2);
-                    b.shoot(x, this.Transform.Centre.Y, direction, "heroBullet");
-                }
-                else
-                {
-                    float x = this.Transform.X - 8;
-                    b.shoot(x, this.Transform.Centre.Y, direction, "heroBullet");
-                    Console.WriteLine("b wid: " + b.Transform.Wid);
+                    fia.repeatAnimtaion(direction + "die", 1, _ =>
+                    {
+                        Black gameoverBackground = new Black();
+                        Camera.mainCamera.changeBundle(gameoverBackground, true);
+                        SoundSystem.mainSoundSystem.playSound("attackSound", "gameover.wav");
+                        SoundSystem.mainSoundSystem.playSound("backgroundMusic", "gameover-bgm.wav");
+                        ToBeDestroyed = true;
+                    });
+                    isLose = true;
                 }
 
-                fia.repeatAnimtaion(direction + "attack1", 1);
-                shoot = false;
-                shootCount = 0;
-            }
-
-            specialCount += Bootstrap.getDeltaTime();
-            if (special1 && special2 && specialCount > 1.0f)
-            {
-                RedBullet b = new RedBullet();
-                if (direction == "right")
+                //Inputs update
+                if (right)
                 {
-                    Console.WriteLine("attack right!");
-                    float x = this.Transform.Centre.X + (this.Transform.Wid / 2);
-                    b.shoot(x, this.Transform.Centre.Y, direction, "redBullet");
-                }
-                else
-                {
-                    Console.WriteLine("attack left!");
-                    float x = this.Transform.X - 51;
-                    b.shoot(x, this.Transform.Centre.Y, direction, "redBullet");
+                    Transform.translate(1 * speed * Bootstrap.getDeltaTime(), 0);
                 }
 
+                if (left)
+                {
+                    Transform.translate(-1 * speed * Bootstrap.getDeltaTime(), 0);
+                }
 
-                fia.repeatAnimtaion(direction + "attack2", 1);
-                special1 = false;
-                special2 = false;
-                specialCount = 0;
+                if (jumpUp)
+                {
+                    canJump = false;
+                    if (jumpCount < 0.3f)
+                    {
+                        this.Transform.translate(0, -1 * jumpSpeed * Bootstrap.getDeltaTime());
+                        jumpCount += Bootstrap.getDeltaTime();
+                    }
+                    else
+                    {
+                        jumpCount = 0;
+                        jumpUp = false;
+                    }
+                }
+
+                shootCount += Bootstrap.getDeltaTime();
+                if (shoot && shootCount > 0.6f)
+                {
+                    Bullet b = new Bullet();
+                    Random ran = new Random();
+                    SoundSystem.mainSoundSystem.playSound("attackSound", "fia-attack-" + ran.Next(4) + ".wav");
+                    if (direction == "right")
+                    {
+                        float x = this.Transform.Centre.X + (this.Transform.Wid / 2);
+                        b.shoot(x, this.Transform.Centre.Y, direction, "heroBullet");
+                    }
+                    else
+                    {
+                        float x = this.Transform.X - 8;
+                        b.shoot(x, this.Transform.Centre.Y, direction, "heroBullet");
+                        Console.WriteLine("b wid: " + b.Transform.Wid);
+                    }
+
+                    fia.repeatAnimtaion(direction + "attack1", 1);
+                    shoot = false;
+                    shootCount = 0;
+                }
+
+                specialCount += Bootstrap.getDeltaTime();
+                if (special1 && special2 && specialCount > 1.0f)
+                {
+                    RedBullet b = new RedBullet();
+                    if (direction == "right")
+                    {
+                        Console.WriteLine("attack right!");
+                        float x = this.Transform.Centre.X + (this.Transform.Wid / 2);
+                        b.shoot(x, this.Transform.Centre.Y, direction, "redBullet");
+                    }
+                    else
+                    {
+                        Console.WriteLine("attack left!");
+                        float x = this.Transform.X - 51;
+                        b.shoot(x, this.Transform.Centre.Y, direction, "redBullet");
+                    }
+
+
+                    fia.repeatAnimtaion(direction + "attack2", 1);
+                    special1 = false;
+                    special2 = false;
+                    specialCount = 0;
+                }
             }
 
             //Animation update
@@ -291,7 +303,7 @@ namespace SmallDemo
             {
                 if (invisCount >= 0.3)
                 {
-                    health -= 10;
+                    health -= 50;
                     Console.WriteLine("Current health: " + health);
                     invisCount = 0;
                 }
@@ -301,7 +313,7 @@ namespace SmallDemo
             {
                 if(invisCount >= 0.3)
                 {
-                    health -= 10;
+                    health -= 50;
                     Console.WriteLine("Current health: " + health);
                     invisCount = 0;
                 }     
@@ -310,6 +322,10 @@ namespace SmallDemo
             
             if (x.Parent.checkTag("winFlag"))
             {
+                MissionAccomplished winBackground = new MissionAccomplished();
+                Camera.mainCamera.changeBundle(winBackground, true);
+                SoundSystem.mainSoundSystem.playSound("attackSound", "fia-win-0.wav");
+                SoundSystem.mainSoundSystem.playSound("backgroundMusic", "win-bgm.wav");
                 isWin = true;
                 Console.WriteLine("win");
             }
@@ -337,11 +353,11 @@ namespace SmallDemo
                 return;
             }
 
-                if (x.Parent.checkTag("enemy"))
+            if (x.Parent.checkTag("enemy"))
             {
                 if (invisCount >= 0.3)
                 {
-                    health -= 10;
+                    health -= 50;
                     Console.WriteLine("Current health: " + health);
                     invisCount = 0;
                 }

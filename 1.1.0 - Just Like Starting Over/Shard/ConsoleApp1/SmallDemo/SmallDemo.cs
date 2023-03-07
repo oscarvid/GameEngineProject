@@ -33,31 +33,21 @@ namespace Shard
 
         public override void update()
         {
-            //Bootstrap.getDisplay().showText("FPS: " + Bootstrap.getSecondFPS() + " / " + Bootstrap.getFPS(), 10, 10, 12, 255, 255, 255);
-            if (isWin())
+            if (!isLose() && !isWin())
             {
-                Color col = Color.FromArgb(random.Next(0, 256), random.Next(0, 256), random.Next(0, 256));
-                createBlack();
-                Bootstrap.getDisplay().showText("YOU WIN!", 150, 168, 64, col);
-            }
-            
-            if (isLose())
-            {
-                Color col = Color.FromArgb(random.Next(0, 256), random.Next(0, 256), random.Next(0, 256));
-                createBlack();
-                Bootstrap.getDisplay().showText("GAME OVER", 140, 168, 64, col);
-            }
+                //Bootstrap.getDisplay().showText("FPS: " + Bootstrap.getSecondFPS() + " / " + Bootstrap.getFPS(), 10, 10, 12, 255, 255, 255);
 
-            if(spawnEnemyCount > 20.0)
-            {
-                Random rand = new Random();
-                int index = rand.Next(0, 2);
-                EnemyFactory.Instance.createEnemy(enemyTypes[index], hero.Transform.Centre.X + 300f, 260f);
-                Console.WriteLine("New " + enemyTypes[index] + " spawned");
-                spawnEnemyCount = 0;
-            }
+                if (spawnEnemyCount > 20.0)
+                {
+                    Random rand = new Random();
+                    int index = rand.Next(0, 2);
+                    EnemyFactory.Instance.createEnemy(enemyTypes[index], hero.Transform.Centre.X + 300f, 260f);
+                    Console.WriteLine("New " + enemyTypes[index] + " spawned");
+                    spawnEnemyCount = 0;
+                }
 
-            spawnEnemyCount += Bootstrap.getDeltaTime();
+                spawnEnemyCount += Bootstrap.getDeltaTime();
+            }
         }
 
         private void createBlack()
@@ -84,7 +74,7 @@ namespace Shard
         public void createFood()
         {
             GameObject food1 = new Food(800, 280, "Fresh_cut_crab_sashimi.png", 10, "sashimi");
-            GameObject food2 = new Food(1500, 250, "High_pressure_re-bake_soup.png", 10, "soup");
+            GameObject food2 = new Food(800, 280, "High_pressure_re-bake_soup.png", 10, "soup");
         }
         
         public void createWinFlag()
@@ -105,7 +95,8 @@ namespace Shard
             EnemyFactory.Instance.createEnemy("enemy3", 800f, 260f);
             EnemyFactory.Instance.createEnemy("enemy4", 1100f, 260f);
             //createDashboard();
-            Bootstrap.getSound().playSound ("act16side.wav");
+            SoundSystem.mainSoundSystem.playSound("backgroundMusic", "act16side.wav");
+            //Bootstrap.getSound().playSound ("act16side.wav");
         }
     }
 }
