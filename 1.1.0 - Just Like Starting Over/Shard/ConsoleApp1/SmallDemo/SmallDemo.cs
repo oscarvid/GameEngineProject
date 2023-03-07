@@ -48,7 +48,7 @@ namespace Shard
                 Bootstrap.getDisplay().showText("GAME OVER", 140, 168, 64, col);
             }
 
-            if(spawnEnemyCount > 20.0)
+            if(spawnEnemyCount > 20.0 && hero.Transform.Centre.X + 300f <= 2048)
             {
                 Random rand = new Random();
                 int index = rand.Next(0, 2);
