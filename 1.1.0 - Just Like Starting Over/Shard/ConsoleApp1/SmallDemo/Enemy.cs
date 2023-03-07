@@ -9,7 +9,7 @@ namespace SmallDemo
 {
     abstract class Enemy: GameObject, CollisionHandler
     {
-        protected bool left, right, isDead;
+        protected bool left, right, isDead, attcking;
         protected int health, speed, defence;
         protected string direction;
         protected int leftmax = 800, rightmax = 1200;
@@ -28,11 +28,12 @@ namespace SmallDemo
 
             direction = "left";
             isDead = false;
+
         }
 
         public override void update()
         {
-            if (!isDead)
+            if (!isDead && !attcking)
             {
                 if (Transform.X >=
                     rightmax) //this number should be get from the enemy1 or enemy2 class so that each enemy will have their own active range
@@ -78,6 +79,13 @@ namespace SmallDemo
                 Console.WriteLine("health:"+ health);
             }
 
+            if (x.Parent.checkTag("hero"))
+            {
+                Console.WriteLine("ENMEY ATTACK!");
+                attcking = true;
+                enemyAnimations.repeatAnimtaion(direction + "attack", 1);
+            }
+
             if (health <= 0)
             {
                 enemyAnimations.repeatAnimtaion(direction + "die", 1, _ => ToBeDestroyed = true);
@@ -87,11 +95,24 @@ namespace SmallDemo
 
         public void onCollisionExit(PhysicsBody x)
         {
+            if (x == null)
+            {
+                return;
+            }
 
+            if (x.Parent.checkTag("hero"))
+            {
+                attcking = false;
+            }
         }
         public void onCollisionStay(PhysicsBody x)
         {
-
+            if (x.Parent.checkTag("hero"))
+            {
+                Console.WriteLine("ENMEY ATTACK!");
+                attcking = true;
+                enemyAnimations.repeatAnimtaion(direction + "attack", 1);
+            }
         }
     }
 }

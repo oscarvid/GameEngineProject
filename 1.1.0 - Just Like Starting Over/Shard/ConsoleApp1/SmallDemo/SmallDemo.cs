@@ -13,6 +13,9 @@ namespace Shard
     {
         private Hero hero;
         private Random random;
+        private double spawnEnemyCount;
+        private string[] enemyTypes = { "enemy3, enemy4" };
+        
         public override bool isRunning()
         {
             return true;
@@ -44,6 +47,14 @@ namespace Shard
                 createBlack();
                 Bootstrap.getDisplay().showText("GAME OVER", 140, 168, 64, col);
             }
+
+            if(spawnEnemyCount > 20.0)
+            {
+                EnemyFactory.Instance.createEnemy("enemy3", 800f, 250f);
+                spawnEnemyCount = 0;
+            }
+
+            spawnEnemyCount += Bootstrap.getDeltaTime();
         }
 
         private void createBlack()
@@ -67,18 +78,6 @@ namespace Shard
             GameObject bg = new Background();
         }
         
-
-        public void createEnemy()
-        {
-            //EnemyFactory.Instance.createEnemy("enemy1", 1000f, 250f);
-            //EnemyFactory.Instance.createEnemy("enemy2", 1100f, 250f);
-            EnemyFactory.Instance.createEnemy("enemy3", 800f, 250f);
-            EnemyFactory.Instance.createEnemy("enemy4", 1100f, 250f);
-            //GameObject enemy2 = new enemy2();
-            //GameObject enemy1 = new enemy1();
-            //Enemy1_1 enemy1_1 = new Enemy1_1();
-        }
-        
         public void createFood()
         {
             GameObject food1 = new Food(100, 250, "Fresh_cut_crab_sashimi.png", 10);
@@ -99,7 +98,8 @@ namespace Shard
             createWinFlag();
             createFood();
             createHero();
-            createEnemy();
+            EnemyFactory.Instance.createEnemy("enemy3", 800f, 250f);
+            EnemyFactory.Instance.createEnemy("enemy4", 1100f, 250f);
             //createDashboard();
             Bootstrap.getSound().playSound ("act16side.wav");
         }
