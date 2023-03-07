@@ -37,7 +37,7 @@ namespace Shard
             {
                 //Bootstrap.getDisplay().showText("FPS: " + Bootstrap.getSecondFPS() + " / " + Bootstrap.getFPS(), 10, 10, 12, 255, 255, 255);
 
-                if (spawnEnemyCount > 20.0)
+                if(spawnEnemyCount > 20.0 && hero.Transform.Centre.X + 300f <= 2048)
                 {
                     Random rand = new Random();
                     int index = rand.Next(0, 2);
@@ -74,7 +74,7 @@ namespace Shard
         public void createFood()
         {
             GameObject food1 = new Food(800, 280, "Fresh_cut_crab_sashimi.png", 10, "sashimi");
-            GameObject food2 = new Food(800, 280, "High_pressure_re-bake_soup.png", 10, "soup");
+            GameObject food2 = new Food(1500, 250, "High_pressure_re-bake_soup.png", 10, "soup");
         }
         
         public void createWinFlag()
