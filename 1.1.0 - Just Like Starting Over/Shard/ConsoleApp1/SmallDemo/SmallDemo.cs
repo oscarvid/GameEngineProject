@@ -14,7 +14,7 @@ namespace Shard
         private Hero hero;
         private Random random;
         private double spawnEnemyCount;
-        private string[] enemyTypes = { "enemy3, enemy4" };
+        private string[] enemyTypes = { "enemy3", "enemy4" };
         
         public override bool isRunning()
         {
@@ -50,7 +50,10 @@ namespace Shard
 
             if(spawnEnemyCount > 20.0)
             {
-                EnemyFactory.Instance.createEnemy("enemy3", 800f, 250f);
+                Random rand = new Random();
+                int index = rand.Next(0, 2);
+                EnemyFactory.Instance.createEnemy(enemyTypes[index], hero.Transform.Centre.X + 300f, 260f);
+                Console.WriteLine("New " + enemyTypes[index] + " spawned");
                 spawnEnemyCount = 0;
             }
 
@@ -99,8 +102,8 @@ namespace Shard
             createWinFlag();
             createFood();
             createHero();
-            EnemyFactory.Instance.createEnemy("enemy3", 800f, 250f);
-            EnemyFactory.Instance.createEnemy("enemy4", 1100f, 250f);
+            EnemyFactory.Instance.createEnemy("enemy3", 800f, 260f);
+            EnemyFactory.Instance.createEnemy("enemy4", 1100f, 260f);
             //createDashboard();
             Bootstrap.getSound().playSound ("act16side.wav");
         }
