@@ -366,7 +366,6 @@ namespace SmallDemo
             if (x.Parent.checkTag("ground"))
             {
                 canJump = true;
-                MyBody.UsesGravity = false;
             }
         }
 
