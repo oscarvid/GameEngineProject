@@ -16,7 +16,7 @@ namespace SmallDemo
             MyBody.addRectCollider();
             MyBody.Mass = 10;
             MyBody.Kinematic = true;
-            MyBody.DebugColor = Color.Green;
+            MyBody.DebugColor = Color.Transparent;
             addTag("ground");
 
             this.Transform.SpritePath = Bootstrap.getAssetManager().getAssetPath("ground.png");

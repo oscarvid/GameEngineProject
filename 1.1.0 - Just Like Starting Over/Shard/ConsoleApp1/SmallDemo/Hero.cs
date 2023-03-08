@@ -53,12 +53,11 @@ namespace SmallDemo
             MyBody.UsesGravity = true;
             MyBody.Kinematic = false;
             MyBody.StopOnCollision = true;
-            MyBody.DebugColor = Color.Green;
+            MyBody.DebugColor = Color.Transparent;
 
             isWin = false;
             isLose = false;
 
-            MyBody.DebugColor = Color.Green;
             addTag("hero");
 
         }

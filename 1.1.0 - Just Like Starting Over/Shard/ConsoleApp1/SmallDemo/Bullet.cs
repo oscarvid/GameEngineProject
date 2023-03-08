@@ -49,7 +49,7 @@ namespace SmallDemo
             MyBody.StopOnCollision = true;
             MyBody.addRectCollider();
             MyBody.Kinematic = true;
-            MyBody.DebugColor = Color.Red;
+            MyBody.DebugColor = Color.Transparent;
 
         }
 
