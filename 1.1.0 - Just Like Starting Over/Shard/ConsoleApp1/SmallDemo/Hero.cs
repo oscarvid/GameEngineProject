@@ -10,14 +10,16 @@ namespace SmallDemo
 {
     class Hero: GameObject, InputListener, CollisionHandler
     {
-        //Movement variables
-        bool left, right, jumpUp, canJump, shoot;
-        private double speed = 100, jumpSpeed = 260, jumpCount, invisCount;
+        //Player variables
+        bool left, right, jumpUp, canJump;
+        private double speed = 100, jumpSpeed = 260, jumpCount;
         private int deadZone = 9000, health = 1800;
+        
+        //Weapon variables
+        bool shoot, shooting, specialShooting, special1, special2;
+        private double invisCount;
         private double shootCount, specialCount;
-
-        //Track pressed buttons
-        bool special1, special2;
+        private string weaponDirection;
         
         //Win state
         private bool isWin, isLose;
@@ -77,7 +79,8 @@ namespace SmallDemo
                             right = true;
                             left = false;
                             direction = "right";
-                            fia.updateCurrentAnimation(direction);
+                            if(!shooting && !specialShooting)
+                                fia.updateCurrentAnimation(direction);
                         }
                     }
 
@@ -88,7 +91,8 @@ namespace SmallDemo
                             right = false;
                             left = true;
                             direction = "left";
-                            fia.updateCurrentAnimation(direction);
+                            if (!shooting && !specialShooting)
+                                fia.updateCurrentAnimation(direction);
                         }
                     }
 
@@ -112,7 +116,8 @@ namespace SmallDemo
                         right = true;
                         left = false;
                         direction = "right";
-                        fia.updateCurrentAnimation(direction);
+                        if (!shooting && !specialShooting)
+                            fia.updateCurrentAnimation(direction);
                     }
                 }
 
@@ -124,7 +129,8 @@ namespace SmallDemo
                         left = true;
                         right = false;
                         direction = "left";
-                        fia.updateCurrentAnimation(direction);
+                        if (!shooting && !specialShooting)
+                            fia.updateCurrentAnimation(direction);
                     }
                 }
 
@@ -181,7 +187,7 @@ namespace SmallDemo
 
         public override void update()
         {
-            if (!isLose)
+            if (!isLose && !isWin)
             {
                 invisCount += Bootstrap.getDeltaTime();
 
@@ -225,50 +231,63 @@ namespace SmallDemo
                 }
 
                 shootCount += Bootstrap.getDeltaTime();
-                if (shoot && shootCount > 0.6f)
+
+                if (shoot && !shooting && !specialShooting)
                 {
-                    Bullet b = new Bullet();
                     Random ran = new Random();
                     SoundSystem.mainSoundSystem.playSound("attackSound", "fia-attack-" + ran.Next(4) + ".wav");
-                    if (direction == "right")
+                    weaponDirection = direction;
+                    fia.repeatAnimtaion(weaponDirection + "attack1", 1);
+                    shooting = true;
+                    shootCount = 0;
+                    shoot = false;
+                }
+
+                if (shooting && shootCount > 1.0f)
+                {
+                    Bullet b = new Bullet();
+                    if (weaponDirection == "right")
                     {
                         float x = this.Transform.Centre.X + (this.Transform.Wid / 2);
-                        b.shoot(x, this.Transform.Centre.Y, direction, "heroBullet");
+                        b.shoot(x, this.Transform.Centre.Y, weaponDirection, "heroBullet");
                     }
                     else
                     {
                         float x = this.Transform.X - 8;
-                        b.shoot(x, this.Transform.Centre.Y, direction, "heroBullet");
-                        Console.WriteLine("b wid: " + b.Transform.Wid);
+                        b.shoot(x, this.Transform.Centre.Y, weaponDirection, "heroBullet");
                     }
-
-                    fia.repeatAnimtaion(direction + "attack1", 1);
-                    shoot = false;
-                    shootCount = 0;
+                    shooting = false;
+                    fia.updateCurrentAnimation(direction);
                 }
 
                 specialCount += Bootstrap.getDeltaTime();
-                if (special1 && special2 && specialCount > 1.0f)
+                
+                if (special1 && special2 && !specialShooting && !shooting)
+                {
+                    weaponDirection = direction;
+                    fia.repeatAnimtaion(weaponDirection + "attack2", 1);
+                    specialShooting = true;
+                    specialCount = 0;
+                    special1 = false;
+                    special2 = false;
+                }
+
+                    
+                if (specialShooting && specialCount > 0.9f)
                 {
                     RedBullet b = new RedBullet();
-                    if (direction == "right")
+                    if (weaponDirection == "right")
                     {
-                        Console.WriteLine("attack right!");
                         float x = this.Transform.Centre.X + (this.Transform.Wid / 2);
-                        b.shoot(x, this.Transform.Centre.Y, direction, "redBullet");
+                        b.shoot(x, this.Transform.Centre.Y, weaponDirection, "redBullet");
                     }
                     else
                     {
-                        Console.WriteLine("attack left!");
                         float x = this.Transform.X - 51;
-                        b.shoot(x, this.Transform.Centre.Y, direction, "redBullet");
+                        b.shoot(x, this.Transform.Centre.Y, weaponDirection, "redBullet");
                     }
-
-
-                    fia.repeatAnimtaion(direction + "attack2", 1);
-                    special1 = false;
-                    special2 = false;
-                    specialCount = 0;
+                    specialShooting = false;
+                    fia.updateCurrentAnimation(direction);
                 }
             }
 
@@ -283,6 +302,12 @@ namespace SmallDemo
         
         public void onCollisionEnter(PhysicsBody x)
         {
+
+            if (isWin)
+            {
+                return;
+            }
+
             if (x.Parent.checkTag("ground"))
             {
                 canJump = true;
@@ -346,6 +371,10 @@ namespace SmallDemo
 
         public void onCollisionStay(PhysicsBody x)
         {
+            if (isWin)
+            {
+                return;
+            }
 
             if (x == null)
             {

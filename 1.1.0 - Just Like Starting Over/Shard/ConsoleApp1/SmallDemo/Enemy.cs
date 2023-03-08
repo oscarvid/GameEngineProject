@@ -79,20 +79,16 @@ namespace SmallDemo
             if (x.Parent.checkTag("heroBullet"))
             {
                 health -= (861 - defence);
-                Console.WriteLine("health:"+ health);
             }
             
             if (x.Parent.checkTag("redBullet"))
             {
                 health -= (861 - defence) * 4;
-                Console.WriteLine("health:"+ health);
             }
 
             if (x.Parent.checkTag("hero") && !attacking)
             {
-                Console.WriteLine("ENMEY ATTACK!");
-                attacking = true;
-                enemyAnimations.repeatAnimtaion(direction + "attack", 1);
+                enemyAnimations.updateCurrentAnimation(direction + "attack");
             }
 
             if (health <= 0)
@@ -116,11 +112,9 @@ namespace SmallDemo
         }
         public void onCollisionStay(PhysicsBody x)
         {
-            if (x.Parent.checkTag("hero") && !attacking)
+            if (x.Parent.checkTag("hero"))
             {
-                Console.WriteLine("ENEMY ATTACK!");
                 attacking = true;
-                enemyAnimations.repeatAnimtaion(direction + "attack", 1);
             }
         }
     }

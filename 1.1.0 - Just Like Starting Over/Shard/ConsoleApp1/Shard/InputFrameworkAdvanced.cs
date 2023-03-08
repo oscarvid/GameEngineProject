@@ -37,7 +37,6 @@ namespace Shard
             if (SDL.SDL_IsGameController(device) == SDL.SDL_bool.SDL_TRUE)
             {
                 SDL.SDL_GameControllerOpen(device);
-                //ToDo remove debug print
                 System.Console.WriteLine("Controller " + device + " Connected!");
             }
         }
@@ -49,8 +48,7 @@ namespace Shard
             {
                 System.IntPtr controller = SDL.SDL_GameControllerFromInstanceID(device);
                 SDL.SDL_GameControllerClose(controller);
-                //ToDo remove debug print
-                System.Console.WriteLine("Controller Disconnected!");
+                Debug.Log("Controller Disconnected!");
             }
             
             else
@@ -100,6 +98,7 @@ namespace Shard
                     case SDL.SDL_EventType.SDL_CONTROLLERBUTTONDOWN:
                         {
                             ie.Button = ev.cbutton.button;
+                            ie.DeviceId = ev.cdevice.which;
                             informListeners(ie, "ButtonDown");
                             break;
                         }
@@ -108,6 +107,7 @@ namespace Shard
                     case SDL.SDL_EventType.SDL_CONTROLLERBUTTONUP:
                         {
                             ie.Button = ev.cbutton.button;
+                            ie.DeviceId = ev.cdevice.which;
                             informListeners(ie, "ButtonUp");
                             break;
                         }
@@ -117,6 +117,7 @@ namespace Shard
                         {
                             ie.Axis = ev.caxis.axis;
                             ie.AxisValue = ev.caxis.axisValue;
+                            ie.DeviceId = ev.cdevice.which;
                             informListeners(ie, "AxisMotion");
                             break;
                         }
@@ -124,14 +125,18 @@ namespace Shard
                     //Handle adding device while running the program.
                     case SDL.SDL_EventType.SDL_CONTROLLERDEVICEADDED:
                         {
-                            connectController(ev.cdevice.which);
+                            ie.DeviceId = ev.cdevice.which;
+                            connectController(ie.DeviceId);
+                            informListeners(ie, "DeviceAdded");
                             break;
                         }
 
                     //Handle removing device while running the program.
                     case SDL.SDL_EventType.SDL_CONTROLLERDEVICEREMOVED:
                         {
-                            disconnectController(ev.cdevice.which);
+                            ie.DeviceId = ev.cdevice.which;
+                            disconnectController(ie.DeviceId);           
+                            informListeners(ie, "DeviceRemoved");
                             break;
                         }
 
