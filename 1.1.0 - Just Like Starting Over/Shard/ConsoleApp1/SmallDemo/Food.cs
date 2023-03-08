@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using Shard;
 
 namespace SmallDemo
@@ -23,6 +24,7 @@ namespace SmallDemo
             MyBody.Mass = 10;
             MyBody.UsesGravity = true;
             MyBody.addRectCollider();
+            MyBody.DebugColor = Color.Transparent;
         }
         
         public override void update()
