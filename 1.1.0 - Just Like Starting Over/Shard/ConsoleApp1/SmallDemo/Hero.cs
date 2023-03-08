@@ -181,7 +181,7 @@ namespace SmallDemo
 
         public override void update()
         {
-            if (!isLose)
+            if (!isLose && !isWin)
             {
                 invisCount += Bootstrap.getDeltaTime();
 
@@ -283,6 +283,12 @@ namespace SmallDemo
         
         public void onCollisionEnter(PhysicsBody x)
         {
+
+            if (isWin)
+            {
+                return;
+            }
+
             if (x.Parent.checkTag("ground"))
             {
                 canJump = true;
@@ -346,6 +352,10 @@ namespace SmallDemo
 
         public void onCollisionStay(PhysicsBody x)
         {
+            if (isWin)
+            {
+                return;
+            }
 
             if (x == null)
             {
