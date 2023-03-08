@@ -23,11 +23,13 @@ namespace Shard
 
             SDL.SDL_LoadWAV(file, out have, out buffer, out length);
             dev = SDL.SDL_OpenAudioDevice(IntPtr.Zero, 0, ref have, out want, 0);
+            //Console.WriteLine("dev:" + dev);
 
             int success = SDL.SDL_QueueAudio(dev, buffer, length);
             SDL.SDL_PauseAudioDevice(dev, 0);
 
         }
+        
 
     }
 }

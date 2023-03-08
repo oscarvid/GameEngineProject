@@ -10,6 +10,7 @@ namespace Shard
     {
         private int width, height;
         private GameObject bundle;
+        private bool isFinished;
         public static Camera mainCamera = new Camera();
         public override void initialize()
         {
@@ -17,13 +18,21 @@ namespace Shard
             //this.Transform.Y = bundle.Transform.Y;
             width = 600;
             height = 400;
+            isFinished = false;
         }
 
         public override void update()
         {
-            Transform.X = bundle.Transform.X - width / 2;
+            if (isFinished)
+            {
+                Transform.X = bundle.Transform.X;
+            }
+            else
+            {
+                Transform.X = bundle.Transform.Centre.X - width / 2;
+            }
             //Transform.Y = bundle.Transform.Y - height / 2;
-            Console.WriteLine("Camera: X:" + this.Transform.X + "Y:" + this.Transform.Y);
+            //Console.WriteLine("Camera: X:" + this.Transform.X + "Y:" + this.Transform.Y);
         }
 
         public float globalToRelativeX(float x)
@@ -40,6 +49,12 @@ namespace Shard
         // {
         //     return new Tuple<float, float>(x_ - this.Transform.X, y_ - this.Transform.Y);
         // }
+
+        public void changeBundle(GameObject newBundle, bool gameFinished)
+        {
+            isFinished = gameFinished;
+            bundle = newBundle;
+        }
 
         public GameObject Bundle
         {

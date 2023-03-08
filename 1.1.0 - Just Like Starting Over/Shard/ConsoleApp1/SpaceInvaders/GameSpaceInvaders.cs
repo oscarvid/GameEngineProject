@@ -166,6 +166,7 @@ namespace Shard
 
             myInvaders = new Invader[rows, columns];
             createObjects();
+            Camera.mainCamera.Bundle = ship;
 
             Debug.Log("Bing!");
 

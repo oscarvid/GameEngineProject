@@ -55,6 +55,7 @@ namespace Shard
 
             p = new Platform();
             p.setPosition(0, 750, 256, 50);
+            Camera.mainCamera.Bundle = p;
 
             for (int i = 0; i < 10; i++)
             {

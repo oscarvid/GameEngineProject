@@ -10,6 +10,7 @@ namespace Shard
         private Animation currentAnimation, tmp;
         private int repeat;
         private bool isChecked, isTemporary;
+        private Action<bool> onTemporaryAnimationEnd;
 
         public AnimationCollection()
         {
@@ -25,8 +26,11 @@ namespace Shard
 
         public void updateCurrentAnimation(string sprite)
         {
+            onTemporaryAnimationEnd?.Invoke(false);
+            onTemporaryAnimationEnd = null;
             currentAnimation = animationList[sprite]();
             isTemporary = false;
+            // tmp = a
         }
 
         public void update()
@@ -34,22 +38,27 @@ namespace Shard
             currentAnimation.update();
         }
 
-        public void repeatAnimtaion(string sprite, int rep)
+        public void repeatAnimtaion(string sprite, int rep, Action<bool> onEnd = null)
         {
             if (!isTemporary)
             {
-                tmp = currentAnimation;//how decide
+                tmp = currentAnimation;
+            }
+            else
+            {
+                onTemporaryAnimationEnd?.Invoke(false);
             }
             currentAnimation = animationList[sprite]();
             repeat = rep;
             isTemporary = true;
+            onTemporaryAnimationEnd = onEnd;
         }
 
         public string getCurrentSprite()
         {
             int currentFrame = currentAnimation.Current;
             string currentSprite = currentAnimation.getCurrentSprite();
-            Console.WriteLine("repeat:" + repeat + "currentFrame:" + currentFrame + "Sum:" + currentAnimation.Sum);
+            //Console.WriteLine("repeat:" + repeat + "currentFrame:" + currentFrame + "Sum:" + currentAnimation.Sum);
             if (repeat > 0 && (currentFrame + 1) < currentAnimation.Sum && isChecked)
             {
                 isChecked = false;
@@ -61,6 +70,9 @@ namespace Shard
                 {
                     repeat = -1;
                     currentAnimation = tmp;
+                    isTemporary = false;
+                    onTemporaryAnimationEnd?.Invoke(true);
+                    onTemporaryAnimationEnd = null;
                 }
                 isChecked = true;
             }
