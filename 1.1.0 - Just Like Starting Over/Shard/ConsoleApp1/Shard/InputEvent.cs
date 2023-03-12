@@ -24,7 +24,8 @@ namespace Shard
         private int button = -1;
         private int key = -1;
         private int axis;
-        private int axisValue; 
+        private int axisValue;
+        private int deviceId;
         private string classification;
 
         public int X
@@ -63,6 +64,12 @@ namespace Shard
         {
             get => axisValue;
             set => axisValue = value;
+        }
+
+        public int DeviceId
+        {
+            get => deviceId;
+            set => deviceId = value;
         }
     }
 }
