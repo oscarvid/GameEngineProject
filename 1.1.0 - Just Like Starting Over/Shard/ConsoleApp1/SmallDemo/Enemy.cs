@@ -67,8 +67,7 @@ namespace SmallDemo
                     b.shoot(x, Transform.Centre.Y, direction, "enemyBullet");
                 }
                 
-                if (Transform.X >=
-                    rightmax) //this number should be get from the enemy1 or enemy2 class so that each enemy will have their own active range
+                if (Transform.X >= rightmax) 
                 {
                     if (!left)
                     {

@@ -46,39 +46,31 @@ namespace SmallDemo
                 
                 double heroOffset = Montor.attackTargetForEnemy.getMontorX();
                 //Console.WriteLine("hero offset:" + heroOffset);
-                if (Transform.X - 300 <= heroOffset && shootCount >= 5)
+                if (right)
                 {
-                    if (!left)
+                    if (Transform.X + 300 >= heroOffset && shootCount >= 5)
                     {
-                        right = false;
-                        left = true;
-                        direction = "left";
-                        enemyAnimations.updateCurrentAnimation(direction);
+                        attacking = true;
+                        enemyAnimations.repeatAnimtaion(direction + "attack", 1, _ => attacking = false);
+                        
+                        Bullet b = new Bullet();
+                        float x = Transform.Centre.X;
+                        b.shoot(x, Transform.Centre.Y, direction, "enemy4Bullet");
+                        shootCount = 0;
                     }
-                    attacking = true;
-                    Bullet b = new Bullet();
-                    float x = Transform.X - 8;
-                    b.shoot(x, Transform.Centre.Y, direction, "enemy4Bullet");
-                    attacking = true;
-                    enemyAnimations.repeatAnimtaion(direction + "attack", 1, _ => attacking = false);
-                    shootCount = 0;
                 }
-                else if (Transform.X + 300 >= heroOffset && shootCount >= 5) //attack
+                else
                 {
-                    if (!right)
+                    if (Transform.X - 300 <= heroOffset && shootCount >= 5)
                     {
-                        right = true;
-                        left = false;
-                        direction = "right";
-                        enemyAnimations.updateCurrentAnimation(direction);
+                        attacking = true;
+                        enemyAnimations.repeatAnimtaion(direction + "attack", 1, _ => attacking = false);
+                        
+                        Bullet b = new Bullet();
+                        float x = Transform.X - 8;
+                        b.shoot(x, Transform.Centre.Y, direction, "enemy4Bullet");
+                        shootCount = 0;
                     }
-                    attacking = true;
-                    Bullet b = new Bullet();
-                    float x = Transform.Centre.X + (Transform.Wid / 2);
-                    b.shoot(x, Transform.Centre.Y, direction, "enemy4Bullet");
-                    attacking = true;
-                    enemyAnimations.repeatAnimtaion(direction + "attack", 1, _ => attacking = false);
-                    shootCount = 0;
                 }
 
                 Transform.translate((left ? -1 : 1) * speed * Bootstrap.getDeltaTime(), 0);

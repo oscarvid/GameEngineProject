@@ -45,7 +45,7 @@ namespace SmallDemo
 
             setPhysicsEnabled();
 
-            MyBody.Mass = 2;
+            //MyBody.Mass = 2;
             MyBody.StopOnCollision = true;
             MyBody.addRectCollider();
             MyBody.Kinematic = true;
