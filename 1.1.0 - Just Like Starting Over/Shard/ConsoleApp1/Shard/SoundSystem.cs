@@ -51,10 +51,5 @@ namespace Shard
             soundManager[categoryName].addSound(dev);
 
         }
-
-        public void randomPlay()
-        {
-            
-        }
     }
 }

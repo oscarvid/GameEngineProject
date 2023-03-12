@@ -9,7 +9,8 @@ namespace SmallDemo
         {
             Random ran = new Random();
             leftmax = ran.Next(1800);
-            rightmax = leftmax + ran.Next(200) + 50;
+            rightmax = leftmax + ran.Next(100, 400);
+            Console.WriteLine("enemy3 leftmax: " + leftmax + "rightmax: " + rightmax);
         }
         
         public Enemy4(int left, int right)
@@ -17,9 +18,85 @@ namespace SmallDemo
             leftmax = left;
             rightmax = right;
         }
+        
+        public override void update()
+        {
+            if (!isDead && !attacking)
+            {
+                if (Transform.X >= rightmax) 
+                {
+                    if (!left)
+                    {
+                        right = false;
+                        left = true;
+                        direction = "left";
+                        enemyAnimations.updateCurrentAnimation(direction);
+                    }
+                }
+                else if (Transform.X <= leftmax)
+                {
+                    if (!right)
+                    {
+                        right = true;
+                        left = false;
+                        direction = "right";
+                        enemyAnimations.updateCurrentAnimation(direction);
+                    }
+                }
+                
+                double heroOffset = Montor.attackTargetForEnemy.getMontorX();
+                //Console.WriteLine("hero offset:" + heroOffset);
+                if (Transform.X - 300 <= heroOffset && shootCount >= 5)
+                {
+                    if (!left)
+                    {
+                        right = false;
+                        left = true;
+                        direction = "left";
+                        enemyAnimations.updateCurrentAnimation(direction);
+                    }
+                    attacking = true;
+                    Bullet b = new Bullet();
+                    float x = Transform.X - 8;
+                    b.shoot(x, Transform.Centre.Y, direction, "enemy4Bullet");
+                    attacking = true;
+                    enemyAnimations.repeatAnimtaion(direction + "attack", 1, _ => attacking = false);
+                    shootCount = 0;
+                }
+                else if (Transform.X + 300 >= heroOffset && shootCount >= 5) //attack
+                {
+                    if (!right)
+                    {
+                        right = true;
+                        left = false;
+                        direction = "right";
+                        enemyAnimations.updateCurrentAnimation(direction);
+                    }
+                    attacking = true;
+                    Bullet b = new Bullet();
+                    float x = Transform.Centre.X + (Transform.Wid / 2);
+                    b.shoot(x, Transform.Centre.Y, direction, "enemy4Bullet");
+                    attacking = true;
+                    enemyAnimations.repeatAnimtaion(direction + "attack", 1, _ => attacking = false);
+                    shootCount = 0;
+                }
+
+                Transform.translate((left ? -1 : 1) * speed * Bootstrap.getDeltaTime(), 0);
+            }
+
+            shootCount += Bootstrap.getDeltaTime();
+
+            enemyAnimations.update();
+
+            Transform.SpritePath = Bootstrap.getAssetManager().getAssetPath(enemyAnimations.getCurrentSprite());
+
+            Bootstrap.getDisplay().addToDraw(this);
+        }
+        
         public override void initialize()
         {
             base.initialize();
+            addTag("enemy4");
             
             enemyAnimations.addAnimation("right", () => new Animation("enemy4-right-", 6, 0.8));
             enemyAnimations.addAnimation("left", () => new Animation("enemy4-left-", 6, 0.8));
@@ -31,7 +108,8 @@ namespace SmallDemo
             
             health = 17500;
             defence = 650;
-            speed = 100;
+            speed = 60;
+            shootCount = 0;
         }
     }
 }

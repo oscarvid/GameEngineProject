@@ -6,12 +6,13 @@ using System.Threading;
 
 namespace Shard
 {
-    class Camera: GameObject
+    class Camera : GameObject
     {
         private int width, height;
         private GameObject bundle;
         private bool isFinished;
         public static Camera mainCamera = new Camera();
+
         public override void initialize()
         {
             //this.Transform.X = bundle.Transform.X;
@@ -44,7 +45,7 @@ namespace Shard
         {
             return y - Transform.Y;
         }
-        
+
         // public Tuple<float, float> global2Relative(float x_, float y_)
         // {
         //     return new Tuple<float, float>(x_ - this.Transform.X, y_ - this.Transform.Y);
@@ -61,7 +62,5 @@ namespace Shard
             get => bundle;
             set => bundle = value;
         }
-
-        
     }
 }

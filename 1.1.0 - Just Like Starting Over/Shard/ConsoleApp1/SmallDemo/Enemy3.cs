@@ -5,11 +5,13 @@ namespace SmallDemo
 {
     class Enemy3: Enemy
     {
+        
         public Enemy3()
         {
             Random ran = new Random();
             leftmax = ran.Next(1800);
-            rightmax = leftmax + ran.Next(200) + 50;
+            rightmax = leftmax + ran.Next(80, 300);
+            Console.WriteLine("enemy3 leftmax: " + leftmax + "rightmax: " + rightmax);
         }
         
         public Enemy3(int left, int right)
@@ -18,10 +20,79 @@ namespace SmallDemo
             rightmax = right;
         }
         
+        public override void update()
+        {
+            if (!isDead && !attacking)
+            {
+                if (Transform.X >= rightmax) 
+                {
+                    if (!left)
+                    {
+                        right = false;
+                        left = true;
+                        direction = "left";
+                        enemyAnimations.updateCurrentAnimation(direction);
+                    }
+                }
+                else if (Transform.X <= leftmax)
+                {
+                    if (!right)
+                    {
+                        right = true;
+                        left = false;
+                        direction = "right";
+                        enemyAnimations.updateCurrentAnimation(direction);
+                    }
+                }
+                
+                if (Transform.X - 300 <= Montor.attackTargetForEnemy.getMontorX() && shootCount >= 3) //attack
+                {
+                    if (!left)
+                    {
+                        right = false;
+                        left = true;
+                        direction = "left";
+                        enemyAnimations.updateCurrentAnimation(direction);
+                    }
+                    Bullet b = new Bullet();
+                    float x = Transform.X - 8;
+                    b.shoot(x, Transform.Centre.Y, direction, "enemy3Bullet");
+                    attacking = true;
+                    enemyAnimations.repeatAnimtaion(direction + "attack", 1, _ => attacking = false);
+                    shootCount = 0;
+                }
+                else if (Transform.X + 300 >= Montor.attackTargetForEnemy.getMontorX() && shootCount >= 3) //attack
+                {
+                    if (!right)
+                    {
+                        right = true;
+                        left = false;
+                        direction = "right";
+                        enemyAnimations.updateCurrentAnimation(direction);
+                    }
+                    Bullet b = new Bullet();
+                    float x = Transform.Centre.X + (Transform.Wid / 2);
+                    b.shoot(x, Transform.Centre.Y, direction, "enemy3Bullet");
+                    attacking = true;
+                    enemyAnimations.repeatAnimtaion(direction + "attack", 1, _ => attacking = false);
+                    shootCount = 0;
+                }
+
+                Transform.translate((left ? -1 : 1) * speed * Bootstrap.getDeltaTime(), 0);
+            }
+            shootCount += Bootstrap.getDeltaTime();
+            enemyAnimations.update();
+
+            Transform.SpritePath = Bootstrap.getAssetManager().getAssetPath(enemyAnimations.getCurrentSprite());
+
+            Bootstrap.getDisplay().addToDraw(this);
+        }
+        
         public override void initialize()
         {
             
             base.initialize();
+            addTag("enemy3");
             
             enemyAnimations.addAnimation("right", () => new Animation("enemy3-right-", 10, 1));
             enemyAnimations.addAnimation("left", () => new Animation("enemy3-left-", 10, 1));
