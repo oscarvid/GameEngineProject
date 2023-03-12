@@ -67,7 +67,13 @@ namespace SmallDemo
 
         public void onCollisionEnter(PhysicsBody x)
         {
-            if (x.Parent.checkTag("hero") && this.checkTag("enemyBullet"))
+            if (x.Parent.checkTag("hero") && this.checkTag("enemy3Bullet"))
+            {
+                this.ToBeDestroyed = true;
+                //Console.WriteLine("Bullet Destroyed");
+            }
+            
+            if (x.Parent.checkTag("hero") && this.checkTag("enemy4Bullet"))
             {
                 this.ToBeDestroyed = true;
                 //Console.WriteLine("Bullet Destroyed");

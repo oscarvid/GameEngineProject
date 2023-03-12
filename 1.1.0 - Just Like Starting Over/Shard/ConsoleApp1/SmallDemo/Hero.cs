@@ -12,9 +12,11 @@ namespace SmallDemo
     {
         //Movement variables
         bool left, right, jumpUp, canJump, shoot;
-        private double speed = 100, jumpSpeed = 260, jumpCount, invisCount;
-        private int deadZone = 9000, health = 1800;
+        private double speed = 100, jumpSpeed = 300, jumpCount, invisCount;
+        private int deadZone = 9000, health = 1800, defence = 156;
         private double shootCount, specialCount;
+        private int speedCoefficient;
+        private double speedUpCount;
 
         //Track pressed buttons
         bool special1, special2;
@@ -57,6 +59,8 @@ namespace SmallDemo
 
             isWin = false;
             isLose = false;
+            speedCoefficient = 1;
+            speedUpCount = 0;
 
             MyBody.DebugColor = Color.Green;
             addTag("hero");
@@ -114,6 +118,7 @@ namespace SmallDemo
                         left = false;
                         direction = "right";
                         fia.updateCurrentAnimation(direction);
+                        speedUpCount = 0;
                     }
                 }
 
@@ -126,6 +131,7 @@ namespace SmallDemo
                         right = false;
                         direction = "left";
                         fia.updateCurrentAnimation(direction);
+                        speedUpCount = 0;
                     }
                 }
 
@@ -177,6 +183,8 @@ namespace SmallDemo
                 {
                     special2 = false;
                 }
+
+                speedUpCount = 0;
             }
         }
 
@@ -192,6 +200,7 @@ namespace SmallDemo
                     {
                         Black gameoverBackground = new Black();
                         Camera.mainCamera.changeBundle(gameoverBackground, true);
+                        Montor.attackTargetForEnemy.Bundle = gameoverBackground;
                         SoundSystem.mainSoundSystem.playSound("attackSound", "gameover.wav");
                         SoundSystem.mainSoundSystem.playSound("backgroundMusic", "gameover-bgm.wav");
                         ToBeDestroyed = true;
@@ -202,12 +211,14 @@ namespace SmallDemo
                 //Inputs update
                 if (right)
                 {
-                    Transform.translate(1 * speed * Bootstrap.getDeltaTime(), 0);
+                    Transform.translate(speedCoefficient * speed * Bootstrap.getDeltaTime(), 0);
+                    speedUpCount += Bootstrap.getDeltaTime();
                 }
 
                 if (left)
                 {
-                    Transform.translate(-1 * speed * Bootstrap.getDeltaTime(), 0);
+                    Transform.translate(-1 * speedCoefficient * speed * Bootstrap.getDeltaTime(), 0);
+                    speedUpCount += Bootstrap.getDeltaTime();
                 }
 
                 if (jumpUp)
@@ -271,6 +282,15 @@ namespace SmallDemo
                     special2 = false;
                     specialCount = 0;
                 }
+                //check speed up
+                if (speedUpCount >= 1)
+                {
+                    speedCoefficient = 2;
+                }
+                else
+                {
+                    speedCoefficient = 1;
+                }
             }
 
             //Animation update
@@ -284,6 +304,10 @@ namespace SmallDemo
         
         public void onCollisionEnter(PhysicsBody x)
         {
+            if (isLose || isWin)
+            {
+                return;
+            }
             if (x.Parent.checkTag("ground"))
             {
                 canJump = true;
@@ -291,30 +315,40 @@ namespace SmallDemo
             
             if (x.Parent.checkTag("soup"))
             {
-                health = Math.Min(health + 100, 1800);
+                health = Math.Min(health + 300, 1800);
             }
             
             if (x.Parent.checkTag("sashimi"))
             {
-                health = Math.Min(health + 50, 1800);
+                health = Math.Min(health + 150, 1800);
             }
 
-            if (x.Parent.checkTag("enemyBullet"))
+            if (x.Parent.checkTag("enemy3Bullet"))
             {
                 if (invisCount >= 0.3)
                 {
-                    health -= 50;
-                    Console.WriteLine("Current health: " + health);
+                    health -= (300 - defence);
+                    //Console.WriteLine("Current health: " + health);
+                    invisCount = 0;
+                }
+            }
+            
+            if (x.Parent.checkTag("enemy4Bullet"))
+            {
+                if (invisCount >= 0.3)
+                {
+                    health -= (500 - defence);
+                    //Console.WriteLine("Current health: " + health);
                     invisCount = 0;
                 }
             }
             
             if (x.Parent.checkTag("enemy"))
             {
-                if(invisCount >= 0.3)
+                if(invisCount >= 0.8)
                 {
-                    health -= 50;
-                    Console.WriteLine("Current health: " + health);
+                    health -= 100;
+                    //Console.WriteLine("Current health: " + health);
                     invisCount = 0;
                 }     
             }
@@ -324,6 +358,7 @@ namespace SmallDemo
             {
                 MissionAccomplished winBackground = new MissionAccomplished();
                 Camera.mainCamera.changeBundle(winBackground, true);
+                Montor.attackTargetForEnemy.Bundle = winBackground;
                 SoundSystem.mainSoundSystem.playSound("attackSound", "fia-win-0.wav");
                 SoundSystem.mainSoundSystem.playSound("backgroundMusic", "win-bgm.wav");
                 isWin = true;
@@ -333,7 +368,11 @@ namespace SmallDemo
         
         public void onCollisionExit(PhysicsBody x)
         {
-
+            if (isLose || isWin)
+            {
+                return;
+            }
+            
             if (x == null)
             {
                 return;
@@ -347,7 +386,11 @@ namespace SmallDemo
 
         public void onCollisionStay(PhysicsBody x)
         {
-
+            if (isLose || isWin)
+            {
+                return;
+            }
+            
             if (x == null)
             {
                 return;
@@ -355,10 +398,10 @@ namespace SmallDemo
 
             if (x.Parent.checkTag("enemy"))
             {
-                if (invisCount >= 0.3)
+                if (invisCount >= 0.8)
                 {
-                    health -= 50;
-                    Console.WriteLine("Current health: " + health);
+                    health -= 100;
+                    //Console.WriteLine("Current health: " + health);
                     invisCount = 0;
                 }
             }

@@ -20,8 +20,6 @@ namespace SmallDemo
         public override void initialize()
         {
             setPhysicsEnabled();
-            MyBody.Mass = 10;
-            MyBody.UsesGravity = true;
             MyBody.addRectCollider();
         }
         

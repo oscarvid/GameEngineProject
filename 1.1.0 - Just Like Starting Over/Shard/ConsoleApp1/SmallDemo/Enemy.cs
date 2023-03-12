@@ -13,7 +13,9 @@ namespace SmallDemo
         protected int health, speed, defence;
         protected string direction;
         protected int leftmax = 800, rightmax = 1200;
+        protected float distanceToHero;
         protected AnimationCollection enemyAnimations = new AnimationCollection();
+        protected double shootCount;
 
         public override void initialize()
         {
@@ -35,6 +37,34 @@ namespace SmallDemo
         {
             if (!isDead && !attacking)
             {
+                if (Transform.X - 300 <= Montor.attackTargetForEnemy.getMontorX()) //attack
+                {
+                    if (!left)
+                    {
+                        right = false;
+                        left = true;
+                        direction = "left";
+                        enemyAnimations.updateCurrentAnimation(direction);
+                    }
+                    Bullet b = new Bullet();
+                    float x = Transform.X - 8;
+                    b.shoot(x, Transform.Centre.Y, direction, "enemyBullet");
+                    Console.WriteLine("b wid: " + b.Transform.Wid);
+                }
+                if (Transform.X + 300 >= Montor.attackTargetForEnemy.getMontorX()) //attack
+                {
+                    if (!right)
+                    {
+                        right = true;
+                        left = false;
+                        direction = "right";
+                        enemyAnimations.updateCurrentAnimation(direction);
+                    }
+                    Bullet b = new Bullet();
+                    float x = Transform.Centre.X + (Transform.Wid / 2);
+                    b.shoot(x, Transform.Centre.Y, direction, "enemyBullet");
+                }
+                
                 if (Transform.X >=
                     rightmax) //this number should be get from the enemy1 or enemy2 class so that each enemy will have their own active range
                 {
@@ -82,7 +112,7 @@ namespace SmallDemo
             
             if (x.Parent.checkTag("redBullet"))
             {
-                health -= (861 - defence) * 4;
+                health -= (861 - defence) * 10;
                 Console.WriteLine("health:"+ health);
             }
 
@@ -90,7 +120,23 @@ namespace SmallDemo
             {
                 Console.WriteLine("ENMEY ATTACK!");
                 attacking = true;
-                enemyAnimations.repeatAnimtaion(direction + "attack", 1);
+                enemyAnimations.repeatAnimtaion(direction + "attack", 1, _ => attacking = false);
+            }
+            
+            if (x.Parent.checkTag("enemy3") || x.Parent.checkTag("enemy4"))
+            {
+                if (right)
+                {
+                    right = false;
+                    left = true;
+                    direction = "left";
+                }
+                else
+                {
+                    right = true;
+                    left = false;
+                    direction = "right";
+                }
             }
 
             if (health <= 0)
@@ -109,7 +155,7 @@ namespace SmallDemo
 
             if (x.Parent.checkTag("hero"))
             {
-                attacking = false;
+                //attacking = false;
             }
         }
         public void onCollisionStay(PhysicsBody x)
@@ -118,7 +164,7 @@ namespace SmallDemo
             {
                 Console.WriteLine("ENEMY ATTACK!");
                 attacking = true;
-                enemyAnimations.repeatAnimtaion(direction + "attack", 1);
+                enemyAnimations.repeatAnimtaion(direction + "attack", 1, _ => attacking = false);
             }
         }
     }
