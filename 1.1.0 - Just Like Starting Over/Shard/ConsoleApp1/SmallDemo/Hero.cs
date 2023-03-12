@@ -55,14 +55,13 @@ namespace SmallDemo
             MyBody.UsesGravity = true;
             MyBody.Kinematic = false;
             MyBody.StopOnCollision = true;
-            MyBody.DebugColor = Color.Green;
+            MyBody.DebugColor = Color.Transparent;
 
             isWin = false;
             isLose = false;
             speedCoefficient = 1;
             speedUpCount = 0;
 
-            MyBody.DebugColor = Color.Green;
             addTag("hero");
 
         }
@@ -409,7 +408,6 @@ namespace SmallDemo
             if (x.Parent.checkTag("ground"))
             {
                 canJump = true;
-                MyBody.UsesGravity = false;
             }
         }
 

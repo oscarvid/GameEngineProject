@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using Shard;
 
 namespace SmallDemo
@@ -21,6 +22,7 @@ namespace SmallDemo
         {
             setPhysicsEnabled();
             MyBody.addRectCollider();
+            MyBody.DebugColor = Color.Transparent;
         }
         
         public override void update()
