@@ -43,11 +43,11 @@ namespace Shard
                     EnemyFactory.Instance.createEnemy(enemyTypes[1], 700, 260f);
                     enemyNumber += 2;
                 }
-                if((spawnEnemyCount > 20.0 && hero.Transform.Centre.X + 300f <= 1750 && enemyNumber <= 8))
+                if((spawnEnemyCount > 15.0 && hero.Transform.Centre.X + 200f <= 1750 && enemyNumber <= 8))
                 {
                     Random rand = new Random();
                     int index = rand.Next(0, 2);
-                    EnemyFactory.Instance.createEnemy(enemyTypes[index], hero.Transform.Centre.X + 300f, 260f);
+                    EnemyFactory.Instance.createEnemy(enemyTypes[index], hero.Transform.Centre.X + 200f, 260f);
                     Console.WriteLine("New " + enemyTypes[index] + " spawned");
                     spawnEnemyCount = 0;
                     enemyNumber++;

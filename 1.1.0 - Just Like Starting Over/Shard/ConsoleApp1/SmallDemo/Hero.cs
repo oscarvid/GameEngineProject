@@ -15,7 +15,7 @@ namespace SmallDemo
         private double speed = 100, jumpSpeed = 300, jumpCount, invisCount;
         private int deadZone = 9000, health = 1800, defence = 156;
         private double shootCount, specialCount;
-        private int speedCoefficient;
+        private double speedCoefficient;
         private double speedUpCount;
 
         //Track pressed buttons
@@ -59,7 +59,7 @@ namespace SmallDemo
 
             isWin = false;
             isLose = false;
-            speedCoefficient = 1;
+            speedCoefficient = 0;
             speedUpCount = 0;
 
             addTag("hero");
@@ -284,7 +284,7 @@ namespace SmallDemo
                 //check speed up
                 if (speedUpCount >= 1)
                 {
-                    speedCoefficient = 2;
+                    speedCoefficient = 1.4;
                 }
                 else
                 {
