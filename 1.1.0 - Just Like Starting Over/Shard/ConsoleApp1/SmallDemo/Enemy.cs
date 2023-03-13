@@ -13,7 +13,7 @@ namespace SmallDemo
         protected bool left, right, isDead, attacking;
         protected int health, speed, defence;
         protected string direction;
-        protected int leftmax = 800, rightmax = 1200;
+        protected float leftmax = 800, rightmax = 1200;
         protected float distanceToHero;
         protected AnimationCollection enemyAnimations = new AnimationCollection();
         protected double shootCount;
@@ -118,7 +118,7 @@ namespace SmallDemo
 
             if (x.Parent.checkTag("hero") && !attacking)
             {
-                Console.WriteLine("ENMEY ATTACK!");
+                //Console.WriteLine("ENMEY ATTACK!");
                 attacking = true;
                 enemyAnimations.repeatAnimtaion(direction + "attack", 1, _ => attacking = false);
             }
@@ -142,6 +142,7 @@ namespace SmallDemo
             if (health <= 0)
             {
                 enemyAnimations.repeatAnimtaion(direction + "die", 1, _ => ToBeDestroyed = true);
+                Shard.SmallDemo.enemySpace.deleteEnemy((int)leftmax, (int)rightmax);
                 isDead = true;
             }
         }

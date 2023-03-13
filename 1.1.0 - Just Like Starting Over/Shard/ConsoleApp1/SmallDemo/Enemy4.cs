@@ -13,7 +13,7 @@ namespace SmallDemo
             Console.WriteLine("enemy3 leftmax: " + leftmax + "rightmax: " + rightmax);
         }
         
-        public Enemy4(int left, int right)
+        public Enemy4(float left, float right)
         {
             leftmax = left;
             rightmax = right;
@@ -54,7 +54,7 @@ namespace SmallDemo
                         enemyAnimations.repeatAnimtaion(direction + "attack", 1, _ => attacking = false);
                         
                         Bullet b = new Bullet();
-                        float x = Transform.Centre.X;
+                        float x = Transform.Centre.X + (Transform.Wid / 2);
                         b.shoot(x, Transform.Centre.Y, direction, "enemy4Bullet");
                         shootCount = 0;
                     }

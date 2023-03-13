@@ -8,13 +8,9 @@ namespace SmallDemo
         
         public Enemy3()
         {
-            Random ran = new Random();
-            leftmax = ran.Next(1800);
-            rightmax = leftmax + ran.Next(80, 300);
-            Console.WriteLine("enemy3 leftmax: " + leftmax + "rightmax: " + rightmax);
         }
         
-        public Enemy3(int left, int right)
+        public Enemy3(float left, float right)
         {
             leftmax = left;
             rightmax = right;
