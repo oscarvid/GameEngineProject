@@ -121,7 +121,7 @@ namespace SmallDemo
                         direction = "right";
                         if (!shooting && !specialShooting)
                             fia.updateCurrentAnimation(direction);
-                            speedUpCount = 0;
+                        speedUpCount = 0;
                     }
                 }
 
@@ -135,7 +135,7 @@ namespace SmallDemo
                         direction = "left";
                         if (!shooting && !specialShooting)
                             fia.updateCurrentAnimation(direction);
-                            speedUpCount = 0;
+                        speedUpCount = 0;
                     }
                 }
 
@@ -353,9 +353,9 @@ namespace SmallDemo
             
             if (x.Parent.checkTag("enemy4Bullet"))
             {
-                if (invisCount >= 0.3)
+                if (invisCount >= 0.8)
                 {
-                    health -= (500 - defence);
+                    health -= (400 - defence);
                     //Console.WriteLine("Current health: " + health);
                     invisCount = 0;
                 }

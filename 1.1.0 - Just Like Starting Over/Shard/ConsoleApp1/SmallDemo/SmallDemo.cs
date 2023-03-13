@@ -3,6 +3,7 @@ using SmallDemo;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using MissileCommand;
@@ -16,6 +17,9 @@ namespace Shard
         private double spawnEnemyCount;
         private string[] enemyTypes = { "enemy3", "enemy4" };
         private int enemyNumber;
+
+        // record the enemy occupied space and avoid spawn new enemy at same coordinate
+        public static EnemySpace enemySpace = new EnemySpace();
         
         public override bool isRunning()
         {
@@ -39,15 +43,20 @@ namespace Shard
                 //Bootstrap.getDisplay().showText("FPS: " + Bootstrap.getSecondFPS() + " / " + Bootstrap.getFPS(), 10, 10, 12, 255, 255, 255);
                 if (enemyNumber < 2)
                 {
-                    EnemyFactory.Instance.createEnemy(enemyTypes[0], 400, 260f);
-                    EnemyFactory.Instance.createEnemy(enemyTypes[1], 700, 260f);
+                    EnemyFactory.Instance.createEnemy(enemyTypes[0], 400, 260f, 150);
+                    EnemyFactory.Instance.createEnemy(enemyTypes[1], 700, 260f, 200);
                     enemyNumber += 2;
+                    enemySpace.addEnemy(400, 400 + 150);//write a space class
+                    enemySpace.addEnemy(700, 700 + 200);
                 }
-                if((spawnEnemyCount > 15.0 && hero.Transform.Centre.X + 200f <= 1750 && enemyNumber <= 8))
+                Random rand = new Random();
+                int distance = rand.Next(5, 10) * 50 + (int)hero.Transform.Centre.X;
+                int range = rand.Next(100, 450);
+                if(enemySpace.addEnemy(distance, distance + range) && spawnEnemyCount > 15.0 && distance <= 1750 && enemyNumber <= 8)
                 {
-                    Random rand = new Random();
+                    
                     int index = rand.Next(0, 2);
-                    EnemyFactory.Instance.createEnemy(enemyTypes[index], hero.Transform.Centre.X + 200f, 260f);
+                    EnemyFactory.Instance.createEnemy(enemyTypes[index], distance, 260f, range);
                     Console.WriteLine("New " + enemyTypes[index] + " spawned");
                     spawnEnemyCount = 0;
                     enemyNumber++;

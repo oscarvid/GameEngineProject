@@ -8,13 +8,9 @@ namespace SmallDemo
         
         public Enemy3()
         {
-            Random ran = new Random();
-            leftmax = ran.Next(1800);
-            rightmax = leftmax + ran.Next(80, 300);
-            Console.WriteLine("enemy3 leftmax: " + leftmax + "rightmax: " + rightmax);
         }
         
-        public Enemy3(int left, int right)
+        public Enemy3(float left, float right)
         {
             leftmax = left;
             rightmax = right;
@@ -44,38 +40,33 @@ namespace SmallDemo
                         enemyAnimations.updateCurrentAnimation(direction);
                     }
                 }
-                
-                if (Transform.X - 300 <= Montor.attackTargetForEnemy.getMontorX() && shootCount >= 3) //attack
+
+                double heroOffset = Montor.attackTargetForEnemy.getMontorX();
+                if (right)
                 {
-                    if (!left)
+                    if (Transform.X + 300 >= heroOffset && shootCount >= 3)
                     {
-                        right = false;
-                        left = true;
-                        direction = "left";
-                        enemyAnimations.updateCurrentAnimation(direction);
+                        attacking = true;
+                        enemyAnimations.repeatAnimtaion(direction + "attack", 1, _ => attacking = false);
+                        
+                        Bullet b = new Bullet();
+                        float x = Transform.Centre.X + (Transform.Wid / 2);
+                        b.shoot(x, Transform.Centre.Y, direction, "enemy3Bullet");
+                        shootCount = 0;
                     }
-                    Bullet b = new Bullet();
-                    float x = Transform.X - 8;
-                    b.shoot(x, Transform.Centre.Y, direction, "enemy3Bullet");
-                    attacking = true;
-                    enemyAnimations.repeatAnimtaion(direction + "attack", 1, _ => attacking = false);
-                    shootCount = 0;
                 }
-                else if (Transform.X + 300 >= Montor.attackTargetForEnemy.getMontorX() && shootCount >= 3) //attack
+                else
                 {
-                    if (!right)
+                    if (Transform.X - 300 <= heroOffset && shootCount >= 3)
                     {
-                        right = true;
-                        left = false;
-                        direction = "right";
-                        enemyAnimations.updateCurrentAnimation(direction);
+                        attacking = true;
+                        enemyAnimations.repeatAnimtaion(direction + "attack", 1, _ => attacking = false);
+                        
+                        Bullet b = new Bullet();
+                        float x = Transform.X - 8;
+                        b.shoot(x, Transform.Centre.Y, direction, "enemy3Bullet");
+                        shootCount = 0;
                     }
-                    Bullet b = new Bullet();
-                    float x = Transform.Centre.X + (Transform.Wid / 2);
-                    b.shoot(x, Transform.Centre.Y, direction, "enemy3Bullet");
-                    attacking = true;
-                    enemyAnimations.repeatAnimtaion(direction + "attack", 1, _ => attacking = false);
-                    shootCount = 0;
                 }
 
                 Transform.translate((left ? -1 : 1) * speed * Bootstrap.getDeltaTime(), 0);
